@@ -50,7 +50,7 @@ def checkLogInfo(request):
 				'pwd': pwd
 			}
 			request.session['stuinfo']= stuinfo
-			return HttpResponseRedirect('/mysite/admin/')
+			return HttpResponseRedirect('../admin/')
 
 def changePassword(request):
 	id= request.POST.get('acc')

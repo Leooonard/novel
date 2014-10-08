@@ -13,14 +13,9 @@ from xml.etree.ElementTree import dump
 from xml.etree.ElementTree import Comment
 from xml.etree.ElementTree import tostring
 import os, ctypes, MySQLdb
-import src.LoginModule
-import src.RegisterModule
-import src.AdminModule
-import src.DynamicRouteExpModule
-import src.PersonalSettingModule
 from mysite.form import testForm
 from novel.models import *
-from src import Log
+from src import *
 
 class pingpac:
 	dataNum= 'null'
@@ -33,24 +28,24 @@ class pingpac:
 
 
 def admin(request):
-	c= src.AdminModule.Admin(request)
+	c= AdminModule.Admin(request)
 	return render_to_response('admin.html', c)
 
 def Login(request):
 	c= {}
 	return render_to_response('Login.html', c)
 def DoLogin(request):
-	return src.LoginModule.Login(request)
+	return LoginModule.Login(request)
 
 def changePassword(request):
-	return src.LoginModule.changePassword(request)
+	return LoginModule.changePassword(request)
 
 def Register(request):
 	c= {}
 	return render_to_response('Register.html', c)
 
 def DoRegister(request):
-	return src.RegisterModule.Register(request)
+	return RegisterModule.Register(request)
 
 def PersonalSetting(request):
 	c= src.PersonalSettingModule.PersonalSetting(request)
@@ -320,7 +315,7 @@ def AjaxDynamicRouteExp(request):
 	try:
 		Log.ErrorLog("AjaxDynamicRouteExp", "msg")
 		data= request.GET.get('data')
-		JSONStr= src.DynamicRouteExpModule.DynamicRouteExp(data)
+		JSONStr= DynamicRouteExpModule.DynamicRouteExp(data)
 		return HttpResponse(JSONStr)
 	except:
 		msg= Log.GetErrorMessage(traceback)
