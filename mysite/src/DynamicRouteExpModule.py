@@ -17,7 +17,8 @@ from .. import utils
 def DynamicRouteExp(data):
 	JSONObj= simplejson.loads(data)
 	xmlPath= JSON2XML(JSONObj)
-	libPath= utils.GetFileRealPath(__file__, '../lab-ping.so')
+	#修改了！！！！
+	libPath= utils.GetFileRealPath(__file__, '../test.so')
 	libping= cdll.LoadLibrary(libPath)
 	rtVal= libping.ping(xmlPath)
 	libPath= utils.GetFileRealPath(__file__, '../read.so')
