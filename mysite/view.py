@@ -307,7 +307,6 @@ def AjaxSave(request):
 def AjaxDynamicRouteExp(request):
 	import traceback
 	try:
-		Log.ErrorLog("AjaxDynamicRouteExp", "msg")
 		data= request.GET.get('data')
 		JSONStr= DynamicRouteExpModule.DynamicRouteExp(data)
 		return HttpResponse(JSONStr)

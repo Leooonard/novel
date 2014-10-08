@@ -11,18 +11,20 @@ from xml.etree.ElementTree import Comment
 from xml.etree.ElementTree import tostring
 import os, ctypes, MySQLdb
 import string
+from utils import *
+
 
 def DynamicRouteExp(data):
 	JSONObj= simplejson.loads(data)
 	xmlPath= JSON2XML(JSONObj)
-	libPath= os.path.join(os.path.split(os.path.realpath(__file__))[0], '../lab-ping.so').replace('\\', '/')
+	libPath= GetFileRealPath(__file__, '../lab-ping.so')
 	libping= cdll.LoadLibrary(libPath)
 	rtVal= libping.ping(xmlPath)
-	libPath= os.path.join(os.path.split(os.path.realpath(__file__))[0], '../read.so').replace('\\', '/')
+	libPath= GetFileRealPath(__file__, '../read.so')
 	libping= cdll.LoadLibrary(libPath)
 	rtVal= libping.checkPCAP(ctypes.string_at(rtVal))
 	JSONStr= ctypes.string_at(rtVal)
-	filePath= os.path.join(os.path.split(os.path.realpath(__file__))[0], '../data').replace('\\', '/')
+	filePath= GetFileRealPath(__file__, '../data')
 	fd= open(filePath, 'w')
 	fd.write(JSONStr)
 	fd.close()
@@ -173,8 +175,8 @@ def JSON2XML(JSONObj):
 				devEle.append(devRouteTable)
 				segEle.append(devEle)
 			root.append(segEle)
-		xmlTree.write('/home/mymmoondt/mysite/mysite/data.xml', 'utf8')	
-		return 	'/home/mymmoondt/mysite/mysite/data'
+		xmlTree.write(GetFileRealPath(__file__, '../data.xml'), 'utf8')	
+		return 	GetFileRealPath(__file__, '../data')
 
 
 

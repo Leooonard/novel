@@ -8,12 +8,12 @@
 from django.template.loader import get_template
 from django.template import TemplateDoesNotExist, RequestContext
 from django.shortcuts import render_to_response
-from  django.http import HttpResponse, HttpResponseRedirect, HttpRequest
+from django.http import HttpResponse, HttpResponseRedirect, HttpRequest
 from exceptions import NameError, KeyError, UnicodeDecodeError
+import os
 
 defaultPage= ""
 errorPage= ""
-
 
 # 防止模板名错误引起的问题, 错误后导向主页.
 def RenderResponse(templateName, context= {}):
@@ -85,6 +85,9 @@ def PrintArrived(*args):
     for item in args:
         print item
         print '-'* 50
+
+def GetFileRealPath(file, relativePath):
+    return os.path.join(os.path.split(os.path.realpath(file))[0], relativePath).replace('\\', '/')
 
 try:
     import json
