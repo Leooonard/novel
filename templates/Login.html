@@ -47,7 +47,7 @@
 {% endblock %}
 
 {% block content %}
-	<form id= "infoForm" action= "/mysite/dologin/" method= "post">
+	<form id= "infoForm" action= "/novel/dologin/" method= "post">
 		<div class= "input-group">
 			<span class="input-group-addon">账户</span>
 			<input id= "accInput" name= "acc" type= "text" class= "form-control" required="required"></input>
@@ -59,10 +59,10 @@
 		<p id= "tipsSentence"></p>
 		<div class= "input-group" display= "block">
 			<button id= "submitBtn" type= "submit" class= "btn btn-info">登录</button>
-			<a id= "changePasswordHyperLink" href= "/mysite/forget/"><u>忘记密码</u></a>
+			<a id= "changePasswordHyperLink" href= "/novel/forget/"><u>忘记密码</u></a>
 		</div>
 	</form>
-	<p>还没有账户? 您可以在此<a href= "/mysite/Register/"><u>注册</u></a></p>
+	<p>还没有账户? 您可以在此<a href= "/novel/Register/"><u>注册</u></a></p>
 {% endblock %}
 
 {% block screen %}

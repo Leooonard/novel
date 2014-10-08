@@ -52,7 +52,7 @@
 {% endblock %}
 
 {% block content %}
-	<form id= "infoForm" action= "/mysite/doregister/" method= "post">
+	<form id= "infoForm" action= "/novel/doregister/" method= "post">
 		{% csrf_token %}
 		<div class= "input-group">
 			<span class="input-group-addon">账户</span>
@@ -67,5 +67,5 @@
 			<button id= "submitBtn" type= "submit" class= "btn btn-info ">注册</button>
 		</div>
 	</form>
-	<p>已有账户? 您可以在此<a href= "/mysite/"><u>登录</u></a></p>
+	<p>已有账户? 您可以在此<a href= "/novel/"><u>登录</u></a></p>
 {% endblock %}

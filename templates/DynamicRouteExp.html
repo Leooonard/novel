@@ -1416,7 +1416,7 @@
 					var $loading= $('.loading');
 					var $word= $('.loadingword');
 					$word.text("执行中...");
-					$.get("/mysite/ajaxdynamicrouteexp/?data="+ JSON.stringify(JSONObj)+ "&id="+ ExpID.toString(), function(data){
+					$.get("/novel/ajaxdynamicrouteexp/?data="+ JSON.stringify(JSONObj)+ "&id="+ ExpID.toString(), function(data){
 						$word.css('display', 'none');
 						if(data== 'failed'){
 							alert("执行错误!");
@@ -1489,7 +1489,7 @@
 					var $word= $('.loadingword');
 					$word.text("保存中...");
 					var JSONObj= makeJSONForSave();
-					$.get("/mysite/ajaxsave/?data="+JSON.stringify(JSONObj)+ "&id="+ ExpID.toString(), function(data){
+					$.get("/novel/ajaxsave/?data="+JSON.stringify(JSONObj)+ "&id="+ ExpID.toString(), function(data){
 						$loading.css('display', 'none');
 						$word.css('display', 'none');
 						if(data== 'failed'){
@@ -1513,7 +1513,7 @@
 				var $loading= $('.loading');
 				var $word= $('.loadingword');
 				$word.text("读取中...");
-				$.get("/mysite/ajaxload/", {
+				$.get("/novel/ajaxload/", {
 					"id": ExpID
 				}, function(data){
 					$loading.css('display', 'none');
@@ -1534,7 +1534,7 @@
 			function Exit(){
 				if(confirm("确认要退出？ 建议在推出前先保存")){
 					var $form= $("#menu");
-					window.location.href= "/mysite/admin/";
+					window.location.href= "/novel/admin/";
 				}else{
 					return false;
 				}
