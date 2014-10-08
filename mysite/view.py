@@ -309,6 +309,7 @@ def AjaxDynamicRouteExp(request):
 	try:
 		data= request.GET.get('data')
 		JSONStr= DynamicRouteExpModule.DynamicRouteExp(data)
+		Log.ErrorLog(AjaxDynamicRouteExp.__name__, JSONStr)
 		return HttpResponse(JSONStr)
 	except:
 		msg= Log.GetErrorMessage(traceback)
