@@ -11,20 +11,20 @@ from xml.etree.ElementTree import Comment
 from xml.etree.ElementTree import tostring
 import os, ctypes, MySQLdb
 import string
-from utils import *
+from .. import utils
 
 
 def DynamicRouteExp(data):
 	JSONObj= simplejson.loads(data)
 	xmlPath= JSON2XML(JSONObj)
-	libPath= GetFileRealPath(__file__, '../lab-ping.so')
+	libPath= utils.GetFileRealPath(__file__, '../lab-ping.so')
 	libping= cdll.LoadLibrary(libPath)
 	rtVal= libping.ping(xmlPath)
-	libPath= GetFileRealPath(__file__, '../read.so')
+	libPath= utils.GetFileRealPath(__file__, '../read.so')
 	libping= cdll.LoadLibrary(libPath)
 	rtVal= libping.checkPCAP(ctypes.string_at(rtVal))
 	JSONStr= ctypes.string_at(rtVal)
-	filePath= GetFileRealPath(__file__, '../data')
+	filePath= utils.GetFileRealPath(__file__, '../data')
 	fd= open(filePath, 'w')
 	fd.write(JSONStr)
 	fd.close()
@@ -175,8 +175,8 @@ def JSON2XML(JSONObj):
 				devEle.append(devRouteTable)
 				segEle.append(devEle)
 			root.append(segEle)
-		xmlTree.write(GetFileRealPath(__file__, '../data.xml'), 'utf8')	
-		return 	GetFileRealPath(__file__, '../data')
+		xmlTree.write(utils.GetFileRealPath(__file__, '../data.xml'), 'utf8')	
+		return 	utils.GetFileRealPath(__file__, '../data')
 
 
 
