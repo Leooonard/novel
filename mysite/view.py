@@ -1,9 +1,5 @@
-#-*-coding:utf8-*-
-from django.http import HttpResponse
-from django.template.loader import get_template
-from django.shortcuts import render_to_response
-from django.core.context_processors import csrf
-from django.template import context
+#coding= utf-8
+
 from ctypes import *
 from django.utils import simplejson
 from xml.etree.ElementTree import ElementTree
@@ -16,6 +12,7 @@ import os, ctypes, MySQLdb
 from mysite.form import testForm
 from novel.models import *
 from src import LoginModule, AdminModule, DynamicRouteExpModule, Log, RegisterModule, PersonalSettingModule
+from utils import *
 
 
 class pingpac:
@@ -29,11 +26,10 @@ class pingpac:
 
 def admin(request):
 	c= AdminModule.Admin(request)
-	return render_to_response('admin.html', c)
+	return RenderResponse('admin.html', c)
 
 def Login(request):
-	c= {}
-	return render_to_response('Login.html', c)
+	return RenderResponse('Login.html')
 
 def DoLogin(request):
 	return LoginModule.Login(request)
@@ -42,20 +38,17 @@ def changePassword(request):
 	return LoginModule.changePassword(request)
 
 def Register(request):
-	c= {}
-	return render_to_response('Register.html', c)
+	return RenderResponse('Register.html')
 
 def DoRegister(request):
 	return RegisterModule.Register(request)
 
 def PersonalSetting(request):
 	c= PersonalSettingModule.PersonalSetting(request)
-	return render_to_response('PersonalSetting.html', c)
+	return RenderResponse('PersonalSetting.html', c)
 
 def TeacherSetting(request):
-	c= {}
-	c.update(csrf(request))
-	return render_to_response('TeacherSetting.html', c)	
+	return RenderResponse('TeacherSetting.html')	
 
 def readPCAP(trace):
 	libping= cdll.LoadLibrary('/home/mymmoondt/mysite/mysite/libpcap.so')
