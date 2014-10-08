@@ -15,7 +15,8 @@ from xml.etree.ElementTree import tostring
 import os, ctypes, MySQLdb
 from mysite.form import testForm
 from novel.models import *
-from src import *
+from src import LoginModule
+
 
 class pingpac:
 	dataNum= 'null'
@@ -26,7 +27,6 @@ class pingpac:
 	info= 'null'
 
 
-
 def admin(request):
 	c= AdminModule.Admin(request)
 	return render_to_response('admin.html', c)
@@ -34,6 +34,7 @@ def admin(request):
 def Login(request):
 	c= {}
 	return render_to_response('Login.html', c)
+
 def DoLogin(request):
 	return LoginModule.Login(request)
 
@@ -48,7 +49,7 @@ def DoRegister(request):
 	return RegisterModule.Register(request)
 
 def PersonalSetting(request):
-	c= src.PersonalSettingModule.PersonalSetting(request)
+	c= PersonalSettingModule.PersonalSetting(request)
 	return render_to_response('PersonalSetting.html', c)
 
 def TeacherSetting(request):
