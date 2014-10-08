@@ -15,7 +15,7 @@ from xml.etree.ElementTree import tostring
 import os, ctypes, MySQLdb
 from mysite.form import testForm
 from novel.models import *
-from src import LoginModule
+from src import LoginModule, AdminModule, DynamicRouteExpModule, Log, RegisterModule, PersonalSettingModule
 
 
 class pingpac:
