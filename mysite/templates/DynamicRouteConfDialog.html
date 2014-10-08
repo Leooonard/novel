@@ -1,0 +1,307 @@
+<html>
+	<head>
+		<meta http-equiv= "content-type" content= "text/html; charset= gb2312"/>
+		<title>动态路由配置实验</title>
+	</head>
+	<script>
+		var segArray;
+		var parentArg;
+		var ys=null;
+		function Init(){
+			segArray= window.dialogArguments.getSegIDArray();
+			var ipArray= window.dialogArguments.getIPArray();
+			var maskIPArray= window.dialogArguments.getMaskIPArray();
+			for(var i= 0; i< segArray.length; i++){
+				addIPRow(segArray[i]);
+			}
+			var table= document.getElementById("ipTable");
+			for(var i= 0; i< ipArray.length; i++){
+				var row= table.rows[i+ 1];
+				var cell= row.cells[1];
+				var ipAddr= ipArray[i].concat(".");
+				var si= 0;
+				var li= 0;
+				for(var j= 0; j< 4; j++){
+					while(ipAddr[li]!= '.'){
+						li++;
+					}
+					var str= ipAddr.substring(si, li);
+					var child= cell.children[j];
+					child.value= str; 
+					li++;
+					si= li;
+				}
+				cell= row.cells[2];
+				var maskIPAddr= maskIPArray[i].concat(".");
+				si= 0;
+				li= 0;
+				for(var j= 0; j< 4; j++){
+					while(maskIPAddr[li]!= '.'){
+						li++;
+					}
+					var str= maskIPAddr.substring(si, li);
+					var child= cell.children[j];
+					child.value= str;
+					li++;
+					si= li;
+				}
+			}
+			var rTable= window.dialogArguments.getRouteTable();
+			table= document.getElementById("routeTable");
+			for(var i= 0; i< rTable.length; i++){
+				addRow();
+				var row= table.rows[i+ 1];
+				var cell= row.cells[0];
+				var ipAddr= rTable[i].getIP().concat(".");
+				var si= 0;
+				var li= 0;
+				for(var j= 0; j< 4; j++){
+					while(ipAddr[li]!= '.'){
+						li++;
+					}
+					var str= ipAddr.substring(si, li);
+					var child= cell.children[j];
+					child.value= str; 
+					li++;
+					si= li;
+				}
+				cell= row.cells[1];
+				var maskIPAddr= rTable[i].getMaskIP().concat(".");
+				si= 0;
+				li= 0;
+				for(var j= 0; j< 4; j++){
+					while(maskIPAddr[li]!= '.'){
+						li++;
+					}
+					var str= maskIPAddr.substring(si, li);
+					var child= cell.children[j];
+					child.value= str; 
+					li++;
+					si= li;
+				}
+				cell= row.cells[2];
+				var nextSkip= rTable[i].getNextSkip().concat(".");
+				si= 0;
+				li= 0;
+				for(var j= 0; j< 4; j++){
+					while(nextSkip[li]!= '.'){
+						li++;
+					}
+					var str= nextSkip.substring(si, li);
+					var child= cell.children[j];
+					child.value= str;
+					li++;
+					si= li;
+				}
+			}
+			if(window.dialogArguments.getHostDev()){
+				document.getElementsByName("choiceRadio")[2].checked= false;
+				document.getElementsByName("choiceRadio")[0].checked= true;
+			}
+			if(window.dialogArguments.getTargetDev()){
+				document.getElementsByName("choiceRadio")[2].checked= false;
+				document.getElementsByName("choiceRadio")[1].checked= true;
+			}
+		}
+        	function show(obj){
+                	ys=obj.bgColor;
+                	obj.bgColor="red";
+                }
+                function noshow(obj){
+                        obj.bgColor=ys;
+                }
+		function keyListener(taName, maxLength){
+			var textAr= taName.value;
+			var charCode= taName.value.charAt(taName.value.length- 1);
+			if(charCode>= '0'){
+				if(charCode<= '9'){
+					if((textAr.length)> maxLength){
+						taName.value= taName.value.substring(0, maxLength);
+					}
+				}else{
+					taName.value= taName.value.substring(0, taName.value.length- 1);
+				}
+			}else{
+				taName.value= taName.value.substring(0, taName.value.length- 1);
+			}
+		}
+		function addIPRow(segID){
+			var table= document.getElementById("ipTable");
+			var row= table.insertRow(table.rows.length);
+			var cell= row.insertCell(0);
+			cell.innerHTML= segID.toString();
+			cell= row.insertCell(1);
+			cell.innerHTML= "<textarea rows= '1' cols= '5' style= 'OVERFLOW: hidden' onkeyup= 'keyListener(this, 3)'></textarea> . <textarea rows= '1' cols= '5' style= 'OVERFLOW: hidden' onkeyup= 'keyListener(this, 3)'></textarea> . <textarea rows= '1' cols= '5' style= 'OVERFLOW: hidden' onkeyup= 'keyListener(this, 3)'></textarea> . <textarea rows= '1' cols= '5' style= 'OVERFLOW: hidden' onkeyup= 'keyListener(this, 3)'></textarea>";
+			cell= row.insertCell(2);
+			cell.innerHTML= "<textarea rows= '1' cols= '5' style= 'OVERFLOW: hidden' onkeyup= 'keyListener(this, 3)'></textarea> . <textarea rows= '1' cols= '5' style= 'OVERFLOW: hidden' onkeyup= 'keyListener(this, 3)'></textarea> . <textarea rows= '1' cols= '5' style= 'OVERFLOW: hidden' onkeyup= 'keyListener(this, 3)'></textarea> . <textarea rows= '1' cols= '5' style= 'OVERFLOW: hidden' onkeyup= 'keyListener(this, 3)'></textarea>";
+		}
+		function addRow(){
+			var table= document.getElementById("routeTable");
+			var row= table.insertRow(table.rows.length);
+			var cell= row.insertCell(0);
+			cell.innerHTML= "<textarea rows= '1' cols= '5' style= 'OVERFLOW: hidden' onkeyup= 'keyListener(this, 3)'></textarea> . <textarea rows= '1' cols= '5' style= 'OVERFLOW: hidden' onkeyup= 'keyListener(this, 3)'></textarea> . <textarea rows= '1' cols= '5' style= 'OVERFLOW: hidden' onkeyup= 'keyListener(this, 3)'></textarea> . <textarea rows= '1' cols= '5' style= 'OVERFLOW: hidden' onkeyup= 'keyListener(this, 3)'></textarea>";
+			cell= row.insertCell(1);
+			cell.innerHTML= "<textarea rows= '1' cols= '5' style= 'OVERFLOW: hidden' onkeyup= 'keyListener(this, 3)'></textarea> . <textarea rows= '1' cols= '5' style= 'OVERFLOW: hidden' onkeyup= 'keyListener(this, 3)'></textarea> . <textarea rows= '1' cols= '5' style= 'OVERFLOW: hidden' onkeyup= 'keyListener(this, 3)'></textarea> . <textarea rows= '1' cols= '5' style= 'OVERFLOW: hidden' onkeyup= 'keyListener(this, 3)'></textarea>";
+			cell= row.insertCell(2);
+			cell.innerHTML= "<textarea rows= '1' cols= '5' style= 'OVERFLOW: hidden' onkeyup= 'keyListener(this, 3)'></textarea> . <textarea rows= '1' cols= '5' style= 'OVERFLOW: hidden' onkeyup= 'keyListener(this, 3)'></textarea> . <textarea rows= '1' cols= '5' style= 'OVERFLOW: hidden' onkeyup= 'keyListener(this, 3)'></textarea> . <textarea rows= '1' cols= '5' style= 'OVERFLOW: hidden' onkeyup= 'keyListener(this, 3)'></textarea>";
+		}
+		function deleteRow(){
+			var table= document.getElementById("routeTable");
+			if(table.rows.length> 1){
+				table.deleteRow(table.rows.length- 1);
+			}
+		}
+		function clickListener(){
+			var ipTable= document.getElementById("ipTable");
+			var routeTable= document.getElementById("routeTable");
+			var ipArray= new Array();
+			var maskIPArray= new Array();
+			var routeArray= new Array();
+			for(var i= 1; i< ipTable.rows.length; i++){
+				var row= ipTable.rows[i];
+				var cell= row.cells[1];
+				var str= "";
+				for(var j= 0; j< cell.children.length; j++){
+					if(cell.children[j].value.length<= 0){
+						alert("请完整填写IP地址!");
+						return false;
+					}else{
+						str= str.concat(cell.children[j].value);
+						if(j!= cell.children.length- 1){
+							str= str.concat(".");
+						}
+					}
+				}
+				ipArray.push(str);
+				cell= row.cells[2];
+				str= "";
+				for(var j= 0; j< cell.children.length; j++){
+					if(cell.children[j].value.length<= 0){
+						alert("请完整填写子网掩码!");
+						return false;
+					}else{
+						str= str.concat(cell.children[j].value);
+						if(j!= cell.children.length- 1){
+							str= str.concat(".");
+						}
+					}
+				}
+				maskIPArray.push(str);
+			}
+			window.dialogArguments.setIPArray(ipArray);
+			window.dialogArguments.setMaskIPArray(maskIPArray);
+			for(var i= 1; i< routeTable.rows.length; i++){
+				var rtr= window.dialogArguments.makeRTR();
+				var row= routeTable.rows[i];
+				var cell= row.cells[0];
+				var str= "";
+				for(var j= 0; j< cell.children.length; j++){
+					if(cell.children[j].value.length<= 0){
+						alert("请完整填写路由表!");
+						return false;
+					}else{
+						str= str.concat(cell.children[j].value);
+						if(j!= cell.children.length- 1){
+							str= str.concat(".");
+						}
+					}
+				}
+				rtr.setIP(str);
+				cell= row.cells[1];
+				str= "";
+				for(var j= 0; j< cell.children.length; j++){
+					if(cell.children[j].value.length<= 0){
+						alert("请完整填写路由表!");
+						return false;
+					}else{
+						str= str.concat(cell.children[j].value);
+						if(j!= cell.children.length- 1){
+							str= str.concat(".");
+						}
+					}
+				}
+				rtr.setMaskIP(str);
+				cell= row.cells[2];
+				str= "";
+				for(var j= 0; j< cell.children.length; j++){
+					if(cell.children[j].value.length<= 0){
+						alert("请完整填写路由表!");
+						return false;
+					}else{
+						str= str.concat(cell.children[j].value);
+						if(j!= cell.children.length- 1){
+							str= str.concat(".");
+						}
+					}
+				}
+				rtr.setNextSkip(str);
+				routeArray.push(rtr);
+			}
+			window.dialogArguments.setRouteTable(routeArray);
+			if(document.getElementsByName("choiceRadio")[0].checked){
+				if(window.dialogArguments.getCanHost()){
+					window.dialogArguments.setHostDev(true);
+					window.dialogArguments.setTargetDev(false);
+				}else{
+					alert("该设备不可被设置为源设备， 实验中只能存在一台源设备！");
+					return false;
+				}
+			}else if(document.getElementsByName("choiceRadio")[1].checked){
+				if(window.dialogArguments.getCanTarget()){
+					window.dialogArguments.setHostDev(false);
+					window.dialogArguments.setTargetDev(true);
+				}else{
+					alert("该主机不可被设置为目标设备， 实验中只能存在一台目标设备！");
+					return false;
+				}
+			}else if(document.getElementsByName("choiceRadio")[2].checked){
+				window.dialogArguments.setHostDev(false);
+				window.dialogArguments.setTargetDev(false);
+			}
+			window.returnValue= window.dialogArguments;
+			window.close();
+		}
+	</script>
+	<body onload= "Init()">
+		<p align= "center"> <font size= "+9">路由器配置</font> </p>
+			<hr width= "900" size= "2" color= "#CC6600">
+			<p align= "center">
+				<table id= "ipTable" marginTop= "200px" border= "0" width= "900" align= "center">
+					<tr onmouseover= "show(this)" onmouseout= "noshow(this)" bgcolor= "#cccccc">
+						<td width= 10%> 网段号 </td>
+						<td width= 45%> IP地址 </td>
+						<td width= 45%> 子网掩码 </td>
+					</tr>
+				</table>
+			</p>
+			<hr width= "700" size= "2" color= "#CC6600">
+			<p align= "center">
+				<table id= "routeTable" marginTop= "200px" border= "1" width= "900" align= "center">
+					<tr onmouseover= "show(this)" onmouseout= "noshow(this)" bgcolor= "#cccccc">
+						<td width= 33%> 目的地址 </td>
+						<td width= 33%> 子网掩码 </td>
+						<td width= 33%> 下一跳 </td>
+					</tr>
+				</table>
+			</p>
+			<p align= "center">
+				<input type= "radio" id= "hostRadio" name= "choiceRadio">源设备
+				<input type= "radio" id= "targetRadio" name= "choiceRadio">目标设备
+				<input type= "radio" id= "normalRadio" name= "choiceRadio" checked>普通设备			
+			</p>
+			<p align= "center">
+				<button type= "button" onclick= "clickListener()">	
+					确认
+				</button>
+				<button type= "button" id= "addRow" onclick= "addRow()">
+					添加行
+				</button>
+				<button type= "button" onclick= "deleteRow()">
+					删除行				
+				</button>	
+			</p>
+		</form>	
+	</body>
+</html>
+
+

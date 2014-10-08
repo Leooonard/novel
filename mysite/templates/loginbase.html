@@ -1,0 +1,75 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN" "http://www.w3.org/TR/html4/frameset.dtd">
+<html>
+	<head lang="zh-cn">
+		<meta  charset="gb2312">                
+		<title>动态路由配置实验</title>
+		<script src="/static_media/jquery/jquery-1.10.2.min.js"></script>
+		<script src="/static_media/bootstrap/js/bootstrap.js"></script>
+ 		<script src="/static_media/jquery/jqDnR.js"></script> 
+ 		<script src= "/static_media/jquery/jcanvas.min.js"></script> 
+ 		<link rel="stylesheet" href="http://cdn.bootcss.com/twitter-bootstrap/3.0.3/css/bootstrap.min.css">
+		<style type= "text/css"> 
+			html, body{
+				width: 100%;
+				height: 100%;
+				overflow: hidden;
+			}   
+			body{
+				text-align: center;
+				background-image: url(/static_media/picture/bgpic.jpg);
+				background-size: 100%;
+			}
+			.title{
+				font-size: 2em;
+				font-weight: bolder;
+				font-family: Helvetica, Microsoft Yahei;
+			}
+			.btn:active{
+				outline: none;
+				border: none;
+			}
+			#loginBox{
+				width: 60%;
+				height: 100%;
+				float: right;
+			}
+			#inputBox{
+				text-align: left;
+				margin-top: 15%;
+				margin-left: 5%;
+				width: 400px;
+				padding-right: 100px;
+			}
+			#transparentMirror{
+				position: absolute;
+				right: 0px;
+				top: 0px;
+				width: 60%;
+				height: 100%;
+				background: white;
+				opacity: 0.3;
+				z-index: -90;
+			}
+			.screen{
+				width: 100%;
+				height: 100%;
+			}
+		</style>
+		{% block header %}
+		{% endblock %}
+	</head>
+	<body>
+		<div class= "screen screen_scrolling">
+			<div id= "transparentMirror"></div> 
+			<div id= "loginBox">
+				<div id= "inputBox">
+					<p class= 'title'>虚拟网络实验室</p>
+					{% block content %}
+					{% endblock %}
+				</div>
+			</div>
+		</div>
+		{% block screen %}
+		{% endblock %}
+	</body>
+</html>

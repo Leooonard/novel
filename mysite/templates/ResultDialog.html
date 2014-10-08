@@ -1,0 +1,250 @@
+<html>	
+	<head>                
+		<meta  charset="utf-8">                
+		<title>动态路由配置实验</title>                 
+		<style type="text/css">                         
+		body
+		{                                
+			margin:0px;                        
+		}                 
+		</style>                        
+	</head> 
+	<body onload= "Init()">
+		<canvas id= "canvas" width= "1200" height= "450"></canvas>
+	</body> 
+	<script>
+		function Node(){
+			this.posX= undefined;
+			this.posY= undefined;
+			this.ID= undefined;
+			this.if_stay= false;
+		}
+		function Seg(){
+			this.startX=undefined;
+			this.startY= undefined;
+			this.endX= undefined;
+			this.endY= undefined;
+			this.ID= undefined;
+			this.ConObj1= undefined;
+			this.ConObj2= undefined;
+			this.if_stay= false;
+		}
+		function redrawRect(mainCt){
+			mainCt.clearRect(0, 0, MAIN_CANVAS_WIDTH, MAIN_CANVAS_HEIGHT); 
+			for(var i= 0; i< NodeArr.length; i++){
+				if(NodeArr[i].ID.substring(0, 1)== 'r'){
+					if(NodeArr[i].if_stay== true){
+						mainCt.drawImage(chosen_routeImg, NodeArr[i].posX, NodeArr[i].posY, IMG_WIDTH, IMG_HEIGHT);
+					}else{
+						mainCt.drawImage(routeImg, NodeArr[i].posX, NodeArr[i].posY, IMG_WIDTH, IMG_HEIGHT);
+					}
+				}else{
+					if(NodeArr[i].if_stay== true){
+						mainCt.drawImage(chosen_hostImg, NodeArr[i].posX, NodeArr[i].posY, IMG_WIDTH, IMG_HEIGHT);
+					}else{
+						mainCt.drawImage(hostImg, NodeArr[i].posX, NodeArr[i].posY, IMG_WIDTH, IMG_HEIGHT);
+					}
+				}
+			}
+			for(var i= 0; i< SegArr.length; i++){
+				mainCt.beginPath();
+				if(SegArr[i].if_stay== true){
+					mainCt.strokeStyle= "#00ff00";
+				}else{
+					mainCt.strokeStyle= "#ff0000";
+				}
+				mainCt.dashedLineTo(SegArr[i].startX, SegArr[i].startY, SegArr[i].endX, SegArr[i].endY, 5)
+				//mainCt.moveTo(SegArr[i].startX, SegArr[i].startY);
+				//mainCt.lineTo(SegArr[i].endX, SegArr[i].endY);
+				//mainCt.stroke();
+			}
+        } 
+		function Init(){
+
+		args= undefined;
+		NodeArr= new Array();
+		SegArr= new Array();
+		EventArr= new Array();
+		MAIN_CANVAS_WIDTH= 1200;
+		MAIN_CANVAS_HEIGHT= 450;
+		IMG_WIDTH= 50;
+		IMG_HEIGHT= 50;
+		mainCanvas= undefined;
+		mainCt= undefined;
+		hostImg= new Image();
+		hostImg.src= "/static_media/picture/diannao.jpg";
+		chosen_hostImg= new Image();
+		chosen_hostImg.src= "/static_media/picture/chosen_diannao.jpg";
+		routeImg= new Image();
+		routeImg.src= "/static_media/picture/route.jpg";
+		chosen_routeImg= new Image();
+		chosen_routeImg.src= "/static_media/picture/chosen_route.jpg";
+
+
+			mainCanvas= document.getElementById("canvas");  
+			mainCt= mainCanvas.getContext("2d"); 
+			args= window.dialogArguments;
+			for(var j= 0; j< 2; j++){
+				for(var i= 0; i< args[j].length; i++){
+					var temp= new Node();
+					var Obj= JSON.parse(args[j][i]);
+					temp.posX= Obj.CurrentRectX;
+					temp.posY= Obj.CurrentRectY;
+					if(j== 0){
+						temp.ID= Obj.HostID;
+					}else{
+						temp.ID= Obj.RouteID;
+					}
+					NodeArr.push(temp);
+				}
+			}
+			for(var i= 0; i< args[2].length; i++){
+				var temp= new Seg();
+				var Obj= JSON.parse(args[2][i]);
+				temp.startX= Obj.StartX;
+				temp.startY= Obj.StartY;
+				temp.endX= Obj.EndX;
+				temp.endY= Obj.EndY;
+				temp.ID= Obj.segID;
+				temp.ConObj1= Obj.ConObj1;
+				if(temp.ConObj1.substring(0, 1)== 'r'){
+					temp.ConObj1= 'r'+ (parseInt(temp.ConObj1.substring(1))+ 2).toString();
+				}
+				temp.ConObj2= Obj.ConObj2;
+				if(temp.ConObj2.substring(0, 1)== 'r'){
+					temp.ConObj2= 'r'+ (parseInt(temp.ConObj2.substring(1))+ 2).toString();
+				}
+				SegArr.push(temp);
+			}
+			for(var i= 0; i< args[3].length; i++){
+				EventArr.push(args[3][i]);
+			}
+			console.log(EventArr);
+			redrawRect(mainCt);
+			showResult(0);
+		}
+		function drawLine(tempSegObj, k, Xspd, Yspd, gradient){
+			if(k< 40){
+				mainCt.beginPath();
+				mainCt.strokeStyle= "#00ff00";
+				mainCt.moveTo(tempSegObj.startX, tempSegObj.startY);
+				mainCt.lineTo(tempSegObj.startX+ k* Xspd, tempSegObj.startY+ k* Yspd);
+				mainCt.stroke();
+				window.setTimeout(function(){drawLine(tempSegObj, k+ 1, Xspd, Yspd, gradient)}, 50);
+			}
+		}
+		function sleep(n){   
+        	var start=new Date().getTime();   
+         	while(true){
+         		if(new Date().getTime()-start> n)   
+         			break; 
+         	}  
+     	} 
+		function showResult(i, s, k, x, y, obj){ 
+			var haveStopped= false;
+			if(s== true){
+				if(k< 40){
+					mainCt.beginPath();
+					mainCt.strokeStyle= "#00ff00";
+					mainCt.moveTo(obj.startX, obj.startY);
+					mainCt.lineTo(obj.startX+ k* x, obj.startY+ k* y);
+					mainCt.stroke();
+					window.setTimeout(function(){showResult(i, true, k+ 1, x, y, obj);}, 50);
+				}else{
+					showResult(i+ 1, false, 0, 0, 0, null);
+					return;
+				}
+			}else{
+				if(i< EventArr.length){
+					if(i!= EventArr.length- 1){
+						if(EventArr[i]== EventArr[i+ 1]){
+							var id= EventArr[i];
+							for(var j= 0; j< NodeArr.length; j++){
+								if(id== NodeArr[j].ID){
+									NodeArr[j].if_stay= true;
+								}
+							}
+						}else{
+							for(var j= 0; j< SegArr.length; j++){
+								if(((SegArr[j].ConObj1== EventArr[i])&& (SegArr[j].ConObj2== EventArr[i+ 1]))||
+									((SegArr[j].ConObj2== EventArr[i])&& (SegArr[j].ConObj1== EventArr[i+ 1]))){
+									var tempSegObj= new Seg();
+									var tempX= new Node();
+									var tempX2= new Node();
+									for(var l= 0; l< NodeArr.length; l++){
+										if(NodeArr[l].ID== EventArr[i]){
+											tempX= NodeArr[l];
+										}
+									}
+									for(var l= 0; l< NodeArr.length; l++){
+										if(NodeArr[l].ID== EventArr[i+ 1]){
+											tempX2= NodeArr[l];
+										}
+									}
+									var Xspd= 0;
+									if(tempX.posX> tempX2.posX){
+										Xspd= (SegArr[j].startX- SegArr[j].endX)/ 40
+										tempSegObj.startX= SegArr[j].endX;
+										tempSegObj.startY= SegArr[j].endY;
+									}else{
+										Xspd= (SegArr[j].endX- SegArr[j].startX)/ 40
+										tempSegObj.startX= SegArr[j].startX;
+										tempSegObj.startY= SegArr[j].startY;
+									}
+									var gradient= (SegArr[j].endY- SegArr[j].startY)/
+										 (SegArr[j].endX- SegArr[j].startX);
+									var Yspd= Xspd* gradient;
+									showResult(i, true, 0, Xspd, Yspd, tempSegObj);
+									return;
+								}
+							}
+						}
+					}else{
+						for(var j= 0; j< NodeArr.length; j++){
+							if(NodeArr[j].ID== EventArr[i]){
+								NodeArr[j].if_stay= true;
+							}
+						}
+					}
+					redrawRect(mainCt);
+					for(var j= 0; j< NodeArr.length; j++){
+						NodeArr[j].if_stay= false;
+					}
+					for(var j= 0; j< SegArr.length; j++){
+						SegArr[j].if_stay= false;
+					}
+					window.setTimeout(function(){showResult(i+ 1, false, 0, 0, 0, null);}, 1000);
+					/*if(haveStopped== false){
+						window.setTimeout(function(){showResult(i+ 1);}, 2000);
+					}else{
+						window.setTimeout(function(){showResult(i+ 1);}, 0);
+						haveStopped= false;
+					}*/
+				}
+			}
+			
+		}
+		
+		CanvasRenderingContext2D.prototype.dashedLineTo = function (fromX, fromY, toX, toY, pattern) { 
+    		if (typeof pattern === "undefined") {  
+        		pattern = 5;  
+    		}  
+    		var dx = (toX - fromX);  
+   			var dy = (toY - fromY);  
+    		var distance = Math.floor(Math.sqrt(dx*dx + dy*dy));  
+    		var dashlineInteveral = (pattern <= 0) ? distance : (distance/pattern);  
+    		var deltay = (dy/distance) * pattern;  
+    		var deltax = (dx/distance) * pattern;  
+    		this.beginPath();  
+    		for(var dl=0; dl<dashlineInteveral; dl++) {  
+        		if(dl%2) {  
+            		this.lineTo(fromX + dl*deltax, fromY + dl*deltay);  
+        		} else {                      
+           			this.moveTo(fromX + dl*deltax, fromY + dl*deltay);                    
+        		}                 
+    		}  
+    		this.stroke(); 
+    	};
+
+	</script>
+</html>

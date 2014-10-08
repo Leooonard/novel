@@ -1,0 +1,223 @@
+<html>
+	<head>
+		<meta http-equiv= "content-type" content= "text/html; charset= gb2312"/>
+		<title>PING实验</title>
+	</head>
+	<script>
+		var ys=null;
+		function Init(){
+			var segLIP= window.dialogArguments.getSegLIP();
+			var segRIP= window.dialogArguments.getSegRIP();
+			var routeArray= window.dialogArguments.getRouteTable();
+			addIPRow("Left");
+			addIPRow("Right");
+			var table= document.getElementById("ipTable");
+			if(segLIP.length> 0){
+				var row= table.rows[1];
+				var cell= row.cells[1];
+				var ipAddr= segLIP.concat(".");
+				var si= 0;
+				var li= 0;
+				for(var j= 0; j< 4; j++){
+					while(ipAddr[li]!= '.'){
+						li++;
+					}
+					var str= ipAddr.substring(si, li);
+					var child= cell.children[j];
+					child.value= str; 
+					li++;
+					si= li;
+				}
+			}
+			if(segRIP.length> 0){
+				var row= table.rows[2];
+				var cell= row.cells[1];
+				var ipAddr= segRIP.concat(".");
+				var si= 0;
+				var li= 0;
+				for(var j= 0; j< 4; j++){
+					while(ipAddr[li]!= '.'){
+						li++;
+					}
+					var str= ipAddr.substring(si, li);
+					var child= cell.children[j];
+					child.value= str; 
+					li++;
+					si= li;
+				}
+			}
+			table= document.getElementById("routeTable");
+			for(var i= 0; i< routeArray.length; i++){
+				addRow();
+				var row= table.rows[i+ 1];
+				var cell= row.cells[0];
+				var ipAddr= routeArray[i].getIP().concat(".");
+				var si= 0;
+				var li= 0;
+				for(var j= 0; j< 4; j++){
+					while(ipAddr[li]!= '.'){
+						li++;
+					}
+					var str= ipAddr.substring(si, li);
+					var child= cell.children[j];
+					child.value= str; 
+					li++;
+					si= li;
+				}
+				cell= row.cells[1];
+				cell.children[0].value= routeArray[i].getNextSkip();
+				cell= row.cells[2];
+				cell.children[0].value= routeArray[i].getDistance();
+			}
+		}
+        	function show(obj){
+                	ys=obj.bgColor;
+                	obj.bgColor="red";
+                }
+                function noshow(obj){
+                        obj.bgColor=ys;
+                }
+		function keyListener(taName, maxLength){
+			var textAr= taName.value;
+			var charCode= taName.value.charAt(taName.value.length- 1);
+			if(charCode>= '0'){
+				if(charCode<= '9'){
+					if((textAr.length)> maxLength){
+						taName.value= taName.value.substring(0, maxLength);
+					}
+				}else{
+					taName.value= taName.value.substring(0, taName.value.length- 1);
+				}
+			}else{
+				taName.value= taName.value.substring(0, taName.value.length- 1);
+			}
+		}
+		function addIPRow(segID){
+			var table= document.getElementById("ipTable");
+			var row= table.insertRow(table.rows.length);
+			var cell= row.insertCell(0);
+			cell.innerHTML= segID;
+			cell= row.insertCell(1);
+			cell.innerHTML= "<textarea rows= '1' cols= '5' style= 'OVERFLOW: hidden' onkeyup= 'keyListener(this, 3)'></textarea> . <textarea rows= '1' cols= '5' style= 'OVERFLOW: hidden' onkeyup= 'keyListener(this, 3)'></textarea> . <textarea rows= '1' cols= '5' style= 'OVERFLOW: hidden' onkeyup= 'keyListener(this, 3)'></textarea> . <textarea rows= '1' cols= '5' style= 'OVERFLOW: hidden' onkeyup= 'keyListener(this, 3)'></textarea>";
+		}
+		function addRow(){
+			var table= document.getElementById("routeTable");
+			var row= table.insertRow(table.rows.length);
+			var cell= row.insertCell(0);
+			cell.innerHTML= "<textarea rows= '1' cols= '5' style= 'OVERFLOW: hidden' onkeyup= 'keyListener(this, 3)'></textarea> . <textarea rows= '1' cols= '5' style= 'OVERFLOW: hidden' onkeyup= 'keyListener(this, 3)'></textarea> . <textarea rows= '1' cols= '5' style= 'OVERFLOW: hidden' onkeyup= 'keyListener(this, 3)'></textarea> . <textarea rows= '1' cols= '5' style= 'OVERFLOW: hidden' onkeyup= 'keyListener(this, 3)'></textarea>";
+			cell= row.insertCell(1);
+			cell.innerHTML= "<textarea rows= '1' cols= '5' style= 'OVERFLOW: hidden' onkeyup= 'keyListener(this, 3)'></textarea>";
+			cell= row.insertCell(2);
+			cell.innerHTML= "<textarea rows= '1' cols= '5' style= 'OVERFLOW: hidden' onkeyup= 'keyListener(this, 3)'></textarea>";
+		}
+		function deleteRow(){
+			var table= document.getElementById("routeTable");
+			if(table.rows.length> 1){
+				table.deleteRow(table.rows.length- 1);
+			}
+		}
+		function clickListener(){
+			var ipTable= document.getElementById("ipTable");
+			var routeTable= document.getElementById("routeTable");
+			var routeArray= new Array();
+			for(var i= 1; i< ipTable.rows.length; i++){
+				var row= ipTable.rows[i];
+				var cell= row.cells[1];
+				var str= "";
+				for(var j= 0; j< cell.children.length; j++){
+					if(cell.children[j].value.length<= 0){
+						alert("请完整填写IP地址!");
+						return false;
+					}else{
+						str= str.concat(cell.children[j].value);
+						if(j!= cell.children.length- 1){
+							str= str.concat(".");
+						}
+					}
+				}
+				if(i== 1){
+					window.dialogArguments.setSegLIP(str);
+				}else{
+					window.dialogArguments.setSegRIP(str);
+				}
+			}
+			for(var i= 1; i< routeTable.rows.length; i++){
+				var rtr= window.dialogArguments.makeRTR();
+				var row= routeTable.rows[i];
+				var cell= row.cells[0];
+				var str= "";
+				for(var j= 0; j< cell.children.length; j++){
+					if(cell.children[j].value.length<= 0){
+						alert("请完整填写路由表!");
+						return false;
+					}else{
+						str= str.concat(cell.children[j].value);
+						if(j!= cell.children.length- 1){
+							str= str.concat(".");
+						}
+					}
+				}
+				rtr.setIP(str);
+				cell= row.cells[1];
+				str= "";
+				if(cell.children[0].value.length<= 0){
+					alert("请完整填写路由表!");
+					return false;
+				}else{
+					str= cell.children[0].value;
+				}
+				rtr.setNextSkip(str);
+				cell= row.cells[2];
+				str= "";
+				if(cell.children[0].value.length<= 0){
+					alert("请完整填写路由表!");
+					return false;
+				}else{
+					str= cell.children[0].value;
+				}
+				rtr.setDistance(str);
+				routeArray.push(rtr);
+			}
+			window.dialogArguments.setRouteTable(routeArray);
+			window.returnValue= window.dialogArguments;
+			window.close();
+		}
+	</script>
+	<body onload= "Init()">
+		<p align= "center"> <font size= "+9">路由器配置</font> </p>
+			<hr width= "700" size= "2" color= "#CC6600">
+			<p align= "center">
+				<table id= "ipTable" marginTop= "200px" border= "0" width= "600" align= "center">
+					<tr onmouseover= "show(this)" onmouseout= "noshow(this)" bgcolor= "#cccccc">
+						<td width= 30%> 网段 </td>
+						<td width= 70%> IP地址 </td>
+					</tr>
+				</table>
+			</p>
+			<hr width= "700" size= "2" color= "#CC6600">
+			<p align= "center">
+				<table id= "routeTable" marginTop= "200px" border= "1" width= "600" align= "center">
+					<tr onmouseover= "show(this)" onmouseout= "noshow(this)" bgcolor= "#cccccc">
+						<td width= 50%> 目的网络号 </td>
+						<td width= 25%> 下一站路由器 </td>
+						<td width= 25%> 距离 </td>
+					</tr>
+				</table>
+			</p>
+			<p> <br/> </p>
+			<p align= "center">
+				<button type= "button" onclick= "clickListener()">	
+					确认
+				</button>
+				<button type= "button" id= "addRow" onclick= "addRow()">
+					添加行
+				</button>
+				<button type= "button" onclick= "deleteRow()">
+					删除行				
+				</button>	
+			</p>
+		</form>	
+	</body>
+</html>
+
+

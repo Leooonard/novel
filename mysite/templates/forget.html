@@ -1,0 +1,58 @@
+{% extends 'loginbase.html' %}
+
+{% block header %}
+	<style type="text/css">
+		.input-group{
+			margin-bottom: 20px;
+		}
+		#changePasswordHyperLink{
+			margin-top: 10px;
+			margin-left: 30px;
+		}
+		p{
+			text-decoration: none;
+		}
+		a{
+			color: #E4573D;
+		}
+		#tipsSentence{
+			color: red;
+			font-size: 17px;
+		}
+	</style>
+	<script type="text/javascript">
+		function resultToTips(result){
+			if(result){
+				var errorDict= {
+					'0': "请输入完整信息",
+					'1': "信息格式错误",
+					'2': "用户账户错误"
+				};
+				return errorDict[result];
+			}else{
+				return '';
+			}
+		}
+		$(document).ready(function(){
+			$('#tipsSentence').text(resultToTips({{RESULT}}));
+		});
+	</script>
+{% endblock %}
+
+{% block content %}
+	<form id= "infoForm" action= "" method= "post">
+		<div class= "input-group">
+			<span class="input-group-addon">账户</span>
+			<input id= "accInput" name= "acc" type= "text" class= "form-control" required= "required"></input>
+		</div>
+		<div class= "input-group">
+			<span class="input-group-addon">新密码</span>
+			<input id= "pwdInput" name= "pwd" type= "text" class= "form-control" required= "required"></input>
+		</div>
+		<p id= "tipsSentence"></p>
+		<div class= "input-group" display= "block">
+			<button id= "submitBtn" type= "submit" class= "btn btn-info">修改密码</button>
+			<a id= "return" href= "/mysite/"><u>返回</u></a>
+		</div>
+	</form>
+{% endblock %}

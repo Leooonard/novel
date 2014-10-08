@@ -1,0 +1,1696 @@
+<html>       
+	<head>                
+		<meta  charset="utf-8">                
+		<title>动态路由配置实验</title>  
+		<link rel="stylesheet" type="text/css" href="/static_media/bootstrap/css/bootstrap.min.css">  
+		<script type="text/javascript" src= "/static_media/jquery/jquery-1.11.0.min.js"></script>   
+		<script type="text/javascript" src= "/static_media/jquery/deviceinfo.js"></script>
+		<script type="text/javascript" src= "/static_media/jquery/device.js"></script>   
+		<script type="text/javascript" src= "/static_media/jquery/canvashandler.js"></script>     
+		<style type="text/css">    
+		 html, body{
+		    width: 100%;
+		    height: 100%;
+		    background-color: #D8E8F7;
+		}
+		header{
+		    text-align: center;
+		    font-family: Helvetica, Microsoft Yahei;
+		    font-size: 1.5em;
+		    height: 60px;
+		    line-height: 60px;
+		    color: #FFEDA2;
+		    background-color: #1A5091;
+		    margin-bottom: 20px;
+		}
+		.labpaper{
+		    width: 1205px;
+		    margin: 0 auto;
+		    border: solid 2px #1A6994;
+		    height: 505px;
+		    position: relative;
+		    margin-bottom: 20px;
+		}
+		.labcontrolbar{
+			width: 1205px;
+		    margin: 0 auto;
+		    position: relative;
+		    margin-bottom: 20px;
+		}
+		.labdevice{
+            width: 200px;
+            background-color: #EDEDE6;
+            height: 500px;
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            overflow: visible;
+            z-index: 200;
+       }
+       .labdevicemask{
+       		width: 200px;
+            background-color: white;
+            height: 500px;
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            z-index: 300;
+            opacity: 0.7;
+            display: none;
+       }
+       .labarea{
+            width: 1000px;
+            height: 500px;
+            position: absolute;
+            top: 0px;
+            left: 200px;
+            background-color: #EDEDC8;
+            z-index: 100;
+       }
+       .resultpaper{
+		    width: 1200px;
+		    height: 500px;
+            background-color: #EDEDC8;
+		    margin: auto;
+		    position: absolute;
+		    top: 0px;
+		    left: 0px;
+		    bottom: 0px;
+		    right: 0px;
+		    z-index: 1000;
+		    box-shadow: 5px 5px 5px 5px #757575;
+		    display: none;
+       }
+       .resulttext{
+       		width: 200px;
+       		height: 100%;
+       		overflow: hidden;
+       		font-family: Helvetica, Microsoft Yahei;
+       		color: black;
+       		list-style: none;
+       }
+       .resulttext li{
+       		padding: 3px;
+       }
+		.deviceDiv{
+			display: none;
+			position: absolute;
+			z-index: 300;
+		}  
+		.routeDevDiv{
+			width: 100%;
+			height: 100%;
+			font-size: 0.9em;
+			font-family: Helvetica, Microsoft Yahei;
+			border: solid 1px #E8E7E8;
+			border-radius: 4px;
+			box-shadow: 2px 2px 2px 2px #757575;
+			padding: 5px;
+			background-color: white;
+			max-height: 300px;
+			overflow: auto;
+			z-index: 300;
+		}
+		.routeDevDiv p{
+			margin: 0px 0px;
+		}
+		.routeDevDiv hr{
+			opacity: 0.5;
+			color: #E8E7E8;
+		}
+		.hostDevDiv{
+			width: 100%;
+			height: 100%;
+			font-size: 0.9em;
+			font-family: Helvetica, Microsoft Yahei;
+			border: solid 1px #E8E7E8;
+			border-radius: 4px;
+			box-shadow: 2px 2px 2px 2px #757575;
+			padding: 5px;
+			background-color: white;
+			z-index: 300;
+		}
+		.hostConf{
+			width: 600px;
+			height: 400px;
+			position: absolute;
+			padding: 10px;
+			margin: auto;
+			top: 0px;
+			left: 0px;
+			right: 0px;
+			bottom: 0px;
+			background-color: white;
+			border-radius: 20px;
+			border: solid 3px #E8E7E8;
+			box-shadow: 0px 0px 5px 5px #757575;
+			z-index: 1000;
+		}  
+		.routeConf{
+			width: 600px;
+			height: 400px;
+			position: absolute;
+			padding: 10px;
+			margin: auto;
+			top: 0px;
+			left: 0px;
+			right: 0px;
+			bottom: 0px;
+			background-color: white;
+			border-radius: 20px;
+			border: solid 3px #E8E7E8;
+			box-shadow: 0px 0px 5px 5px #757575;
+			z-index: 1000;
+			overflow: auto;
+		}
+		.loading{
+			width: 100%;
+			height: 100%;
+			position: absolute;
+			left: 0px;
+			top: 0px;
+			background-color: white;
+			opacity: 0.7;
+			z-index: 500;
+			display: none;
+		}     
+		.loadingword{
+			width: 100%;
+			position: absolute;
+			z-index: 1000;
+			display: none;
+			font-family: Helvetica, Microsoft Yahei;
+			font-size: 4em;
+			text-align: center;
+			top: 35%;
+			left: 0px;
+			color: black;
+		}
+		hr{
+			margin: 5px 0px;
+			border: dashed 1px silver;
+		}
+		</style>                        
+	</head>  
+	<script type="text/javascript">   
+			function setHostTarget(info){
+				if(info.hostDev){
+					for(var i= 0; i< routeArray.length; i++){
+						if(routeArray[i].info.hostDev&& routeArray[i].info!= info){
+							info.hostDev= false;
+							alert("不能设定多个源主机!");
+							return false;
+						}
+					}
+					for(var i= 0; i< hostArray.length; i++){
+						if(hostArray[i].info.hostDev&& hostArray[i].info!= info){
+							info.hostDev= false;
+							alert("不能设定多个源主机!");
+							return false;
+						}
+					}
+				}else{
+					for(var i= 0; i< routeArray.length; i++){
+						if(routeArray[i].info.targetDev&& routeArray[i].info!= info){
+							info.targetDev= false;
+							alert("不能设定多个目标主机!");
+							return false;
+						}
+					}
+					for(var i= 0; i< hostArray.length; i++){
+						if(hostArray[i].info.targetDev&& hostArray[i].info!= info){
+							info.targetDev= false;
+							alert("不能设定多个目标主机!");
+							return false;
+						}
+					}
+				}
+			}
+			function tryConnect(info){
+				var array= info.getSegIDArray();
+				for(var i= 0; i< array.length; i++){
+					for(var j= 0; j< segArray.length; j++){
+						if(segArray[j].getID()== array[i]){
+							var routeObj;
+							if(segArray[j].getConObj1().getID()== info.getID()){
+								routeObj= segArray[j].getConObj2();
+							}else{
+								routeObj= segArray[j].getConObj1();
+							}
+							for(var k= 0; k< routeObj.getInfo().getSegIDArray().length; k++){
+								if(routeObj.getInfo().getSegIDArray()[k]== segArray[j].getID()){
+									if(segCompare(routeObj.getInfo().getCmpIPArray()[k], info.getCmpIPArray()[i])){
+											segArray[j].setStrokeColor("g");
+									}else{
+											segArray[j].setStrokeColor("r");
+									}
+									break;
+								}
+							}
+						}
+					}
+				}
+				redrawRect();
+			}
+			function segCompare(segID1, segID2){
+				if(segID1== segID2){    //按不同的网段算法可以改
+					return true;
+				}else{
+					return false;
+				}
+			}    
+			
+
+			function OpenHostConfDialog(info, callbacklist){
+				var $hostConf= $('.hostConf');
+				var $loading= $(".loading");
+				$hostConf.css("display", "block");
+				$loading.css("display", "block");
+				var $btn= $hostConf.find("button.closebtn");
+				var $ip= $hostConf.find("#hostIP");
+				var $mask= $hostConf.find("#hostMask");
+				var $type= $hostConf.find("[name='type']");
+				var $exitbtn= $hostConf.find("button.exitbtn");
+
+
+				//开始初始化.
+				$ip.val(info.IP_Array[0]);
+				$mask.val(info.MaskIP_Array[0]);
+				if(info.hostDev){
+					$($type[0]).attr("checked", "");
+				}else if(info.targetDev){
+					$($type[2]).attr("checked", "");
+				}else{
+					$($type[1]).attr("checked", "");
+				}
+				$type.click(function(){
+					var $this= $(this);
+					$type.each(function(){
+						var $this= $(this);
+						if($this.attr("checked")!= undefined){
+							$this.removeAttr("checked");  //removeAttr不负责判断是否有该属性.
+						}
+					});
+					$this.attr("checked", "");
+				});
+
+				var unInit= function(){
+					$btn.unbind("click");
+					$exitbtn.unbind("click");
+					$type.each(function(){
+						var $this= $(this);
+						if($this.attr("checked")!= undefined){
+							$this.removeAttr("checked");  //removeAttr不负责判断是否有该属性.
+						}
+					});
+					$type.unbind("click");
+				}
+
+				//点击完成
+				$btn.click(function(){
+					var iparray= [];
+					var maskarray= [];
+					var newip= $ip.val()|| "";
+					// 写成这种形式的正则, 必须多加一个\ 因为是在字符串里, \会自动发生转义!!!
+					var exp= new RegExp("^(\\d{1,2}|1\\d\\d|2[0-4]\\d|25[0-5])\\.(\\d{1,2}|1\\d\\d|2[0-4]\\d|25[0-5])\\.(\\d{1,2}|1\\d\\d|2[0-4]\\d|25[0-5])\\.(\\d{1,2}|1\\d\\d|2[0-4]\\d|25[0-5])$");
+					var result= exp.test(newip);
+					if(!result){
+						alert("请填写正确的IP地址!");
+						return false;
+					}else{
+						iparray.push(newip);
+						info.IP_Array= iparray;
+					}
+					var newmask= $mask.val()|| "";
+					result= exp.test(newmask);
+					if(!result){
+						alert("请填写正确的子网掩码!");
+						return false;
+					}else{
+						maskarray.push(newmask);
+						info.MaskIP_Array= maskarray;
+					}
+					if($($type[0]).attr("checked")){
+						info.hostDev= true;
+						info.targetDev= false;
+					}else if($($type[1]).attr("checked")){
+						info.hostDev= false;
+						info.targetDev= false;
+					}else{
+						info.hostDev= false;
+						info.targetDev= true;
+					}
+					for(var i= 0; i< callbacklist.length; i++){
+						if(callbacklist[i]()=== false){
+							return false;
+						}
+					}
+					$hostConf.css("display", "none");
+					$loading.css("display", "none");
+					unInit();
+				});
+				$exitbtn.click(function(){
+					$hostConf.css("display", "none");
+					$loading.css("display", "none");
+					unInit();
+				});
+			}
+
+			function OpenRouteConfDialog(info, callbacklist){
+				var $routeConf= $('.routeConf').clone();
+				var $changeableSection= $routeConf.find(".changeableSection");
+				var $loading= $(".loading");
+				$routeConf.css("display", "block");
+				$loading.css("display", "block");
+				var $btn= $routeConf.find("button.closebtn");
+				var $exitbtn= $routeConf.find("button.exitbtn");
+				var $deletebtn= $routeConf.find("button.deletebtn");
+				var $addrowbtn= $routeConf.find("button.addrowbtn");
+				var $deleterowbtn= $routeConf.find("button.deleterowbtn");
+				//先初始化网段信息, 把各个网段的网段号, 对应IP地址, 子网掩码填入.
+				var $segSection= $routeConf.find(".segSection").clone();
+				$routeConf.find(".segSection").remove();
+				var overflow= false;
+				for(var i= 0; i< info.segID_Array.length; i++){
+					var $s= $segSection.clone();
+					$s.find("p.segID span").text(info.segID_Array[i]);
+					if(!overflow){
+						try{
+							$s.find("input#routeIP").val(info.IP_Array[i]);
+							$s.find("input#routeMask").val(info.MaskIP_Array[i]);
+						}catch(e){
+							overflow= true;
+							$s.find("input#routeIP").val("");
+							$s.find("input#routeMask").val("");
+						}
+					}else{		
+						$s.find("input#routeIP").val("");
+						$s.find("input#routeMask").val("");
+					}
+					$changeableSection.append($s);
+				}
+				//初始化路由表, 把各个路由表的目标IP, 子网掩码, 下一跳填入.
+				var $rtrSection= $routeConf.find(".rtrSection");
+				$routeConf.find(".rtrSection").remove();
+				for(var i= 0; i< info.routeTable.length; i++){
+					var $r= $rtrSection.clone();
+					$r.find("button.deleterowbtn").click(function(){
+						var $this= $(this);
+						$this.parent().remove();
+					});
+					$r.find("input#rtrTargetIP").val(info.routeTable[i].IP);
+					$r.find("input#rtrMask").val(info.routeTable[i].MaskIP);
+					$r.find("input#rtrNextHip").val(info.routeTable[i].nextSkip);
+					$changeableSection.append($r);
+				}
+
+				$(document.body).append($routeConf);
+
+				$deletebtn.click(function(){
+					deleteRoute(info.parent);
+					$routeConf.remove();
+					$loading.css("display", "none");
+				});
+
+				$addrowbtn.click(function(){
+					var $r= $rtrSection.clone();
+					$r.find("button.deleterowbtn").click(function(){
+						var $this= $(this);
+						$this.parent().remove();
+					});
+					$changeableSection.append($r);
+				});
+
+				//点击完成
+				$btn.click(function(){
+					var iparray= [];
+					var maskarray= [];
+					var routetable= [];
+					var test= function(ip){
+						ip= ip|| ""; 	
+						// 写成这种形式的正则, 必须多加一个\ 因为是在字符串里, \会自动发生转义!!!
+						var exp= new RegExp("^(\\d{1,2}|1\\d\\d|2[0-4]\\d|25[0-5])\\.(\\d{1,2}|1\\d\\d|2[0-4]\\d|25[0-5])\\.(\\d{1,2}|1\\d\\d|2[0-4]\\d|25[0-5])\\.(\\d{1,2}|1\\d\\d|2[0-4]\\d|25[0-5])$");
+						var result= exp.test(ip);
+						return result;
+
+					};
+					//收集网段信息, 出错就退出, 不出错就将信息存放在数组里.
+					var $segSection= $routeConf.find(".segSection");
+					for(var i= 0; i< $segSection.length; i++){
+						var $s= $($segSection[i]);
+						if(!test($s.find("input#routeIP").val())){
+							alert("请填写正确的IP地址!");
+							return false;
+						}else{
+							iparray.push($s.find("input#routeIP").val());
+						}
+						if(!test($s.find("input#routeMask").val())){
+							alert("请填写正确的子网掩码!");
+							return false;
+						}else{
+							maskarray.push($s.find("input#routeMask").val());
+						}
+					}
+					//收集路由表信息, 出错就退出, 不出错就做成对象放在数组里.
+					var $rtrSection= $routeConf.find(".rtrSection");
+					for(var i= 0; i< $rtrSection.length; i++){
+						var $r= $($rtrSection[i]);
+						var $tip= undefined;
+						var $mip= undefined;
+						var $nhp= undefined; //下一跳
+						if(!test($r.find("input#rtrTargetIP").val())){
+							alert("请填写正确的路由表目的地址!");
+							return false;
+						}else{
+							$tip= $r.find("input#rtrTargetIP").val();
+						}
+						if(!test($r.find("input#rtrMask").val())){
+							alert("请填写正确的路由表子网掩码!");
+							return false;
+						}else{
+							$mip= $r.find("input#rtrMask").val();
+						}
+						if(!test($r.find("input#rtrNextHip").val())){
+							alert("请填写正确的路由表下一跳地址!");
+							return false;
+						}else{
+							$nhp= $r.find("input#rtrNextHip").val();
+						}
+						var $rtr= new routeTableRow();
+						$rtr.IP= $tip;
+						$rtr.MaskIP= $mip;
+						$rtr.nextSkip= $nhp;
+						routetable.push($rtr);
+					}
+
+					for(var i= 0; i< callbacklist.length; i++){
+						if(callbacklist[i]()=== false){
+							return false;
+						}
+					}
+					info.IP_Array= iparray;
+					info.MaskIP_Array= maskarray;
+					info.routeTable= routetable;
+					$routeConf.remove();
+					$loading.css("display", "none");
+				});
+				$exitbtn.click(function(){
+					$routeConf.remove();
+					$loading.css("display", "none");
+				});
+			}
+
+			function PageInit(){
+				var JSONStr= reLoadStr;
+				var JSONObj= JSON.parse(reLoadStr);
+				for(var i= 0; i< JSONObj.HostData.length; i++){
+					with(JSONObj.HostData[i]){					
+						var h= new Host();
+						h.setID(HostID);
+						h.currentRectX= parseInt(CurrentRectX);
+						h.currentRectY= parseInt(CurrentRectY);
+						if(HostInfo.IP!= "Null"){
+							var ip= new Array();
+							ip.push(HostInfo.IP);
+							h.info.IP_Array= ip;
+						}
+						if(HostInfo.SegID!= "Null"){
+							var segID= new Array();
+							segID.push(HostInfo.SegID);
+							h.info.segID_Array= segID;
+						}
+						if(HostInfo.MaskIP!= "Null"){
+							var maskIP= new Array();
+							maskIP.push(HostInfo.MaskIP);
+							h.info.MaskIP_Array= maskIP;
+						}
+						h.info.hostDev= HostInfo.HostDev;
+						h.info.targetDev= HostInfo.TargetDev;
+						hostArray.push(h);
+					}
+				}
+				for(var i= 0; i< JSONObj.RouteData.length; i++){
+					with(JSONObj.RouteData[i]){	
+						var r= new Route();
+						r.setID("r"+ (parseInt(RouteID.substring(1))-2));
+						r.currentRectX= parseInt(CurrentRectX);
+						r.currentRectY= parseInt(CurrentRectY);
+						var segID= new Array();
+						var IP= new Array();
+						var MaskIP= new Array();
+						var routeTable= new Array();
+						for(var j= 0; j< RouteInfo.SegID_Array.length; j++){
+							segID.push(RouteInfo.SegID_Array[j]);
+							if(j< RouteInfo.IP_Array.length){
+								IP.push(RouteInfo.IP_Array[j]);
+								MaskIP.push(RouteInfo.MaskIP_Array[j]);
+							}
+						}
+						for(var j= 0; j< RouteInfo.RouteTable.length; j++){
+							var rtr= new routeTableRow();
+							rtr.IP= RouteInfo.RouteTable[j].IP;
+							rtr.nextSkip= RouteInfo.RouteTable[j].NextSkip;
+							rtr.MaskIP= RouteInfo.RouteTable[j].MaskIP;
+							routeTable.push(rtr);
+						}
+						r.info.segID_Array= segID;
+						r.info.IP_Array= IP;
+						r.info.MaskIP_Array= MaskIP;
+						r.info.routeTable= routeTable;
+						r.info.hostDev= RouteInfo.HostDev;
+						r.info.targetDev= RouteInfo.TargetDev;
+						routeArray.push(r);
+					}
+				}
+				for(var i= 0; i< JSONObj.SegData.length; i++){
+					with(JSONObj.SegData[i]){			
+						var s= new NetWorkSeg();
+						s.setID(segID);
+						s.startX= StartX;
+						s.startY= StartY;
+						s.endX= EndX;
+						s.endY= EndY;
+						s.strokeColor= StrokeColor;
+						for(var j= 0; j< routeArray.length; j++){
+							if(routeArray[j].getID()== ConObj1){
+								s.conObj1= routeArray[j];
+								break;
+							}
+						}
+						for(var j= 0; j< hostArray.length; j++){
+							if(hostArray[j].getID()== ConObj1){
+								s.conObj1= hostArray[j];
+								break;
+							}
+						}
+						for(var j= 0; j< routeArray.length; j++){
+							if(routeArray[j].getID()== ConObj2){
+								s.conObj2= routeArray[j];
+								break;
+							}
+						}
+						for(var j= 0; j< hostArray.length; j++){
+							if(hostArray[j].getID()== ConObj2){
+								s.conObj2= hostArray[j];
+								break;
+							}
+						}	
+						segArray.push(s);
+					}
+				}
+				HostCount= hostArray.length;
+				if(segArray.length> 0){
+					segIDCount= parseInt(segArray[segArray.length- 1].getID().substring(1));
+					segIDCount++;
+				}else{
+					segIDCount= 0;	
+				}
+				if(routeArray.length> 0){
+					routeIDCount= parseInt(routeArray[routeArray.length- 1].getID().substring(1));
+					routeIDCount++;
+				}else{
+					routeIDCount= 0;
+				}
+				redrawRect();
+				devRedrawRect();
+			}
+			$(document).ready(function(){ 	
+				$.ajaxSetup({
+					"timeout": 5000 //设定ajax超时为5S
+				});
+
+
+				if("{{ID}}"){
+					ExpID= "{{ID}}";
+				}else{
+					ExpID= undefined;
+				}                  
+				MAIN_CANVAS_WIDTH=1000;                        
+				MAIN_CANVAS_HEIGHT=500;   
+				DEV_CANVAS_WIDTH= 200;
+				DEV_CANVAS_HEIGHT= 500;                    
+				IMG_WIDTH=50;                        
+				IMG_HEIGHT=50; 
+				Con_Mode= false; 
+				DelRoute_Mode= false;
+				ConModeSelCount= 0; 
+				DelModeSelCount= 0;
+				HostCount= 0;
+				segIDCount= 0;
+				routeIDCount= 0;
+
+
+				mainCanvas= $("#canvas");   
+				mainCt= mainCanvas.get(0).getContext("2d"); 
+				mainCanvasMouseHandler= new CanvasMouseHandler();
+				mainCanvasMouseHandler.init({
+					"bias": {
+						"left": mainCanvas.offset().left,
+						"top": mainCanvas.offset().top
+					},
+					"stepSize": 1,
+					"mdcallback": function(x, y){
+						var func= function(array){		
+							// 检查是否按在了设备之内, 在的返回TRUE, 不在的返回FALSE;
+							for(var i= 0; i< array.length; i++){	
+								if(array[i].checkRect(x, y)){
+									return array[i];
+								}
+							}
+							return false;
+						}; 
+						var obj;
+						func(routeArray)? obj= func(routeArray): (func(hostArray)? obj= func(hostArray): obj= null);
+						return obj;
+					},
+					"rdcallback": redrawRect
+				});
+				mainCanvasMouseHandler.bind(mainCanvas);
+
+				$devCanvas= $("#devCanvas");
+				$devCt= $devCanvas.get(0).getContext("2d");
+				var devCanvasMouseHandler= new CanvasMouseHandler();
+				devCanvasMouseHandler.init({
+					"bias": {
+						"left": $devCanvas.offset().left,
+						"top": $devCanvas.offset().top
+					},
+					"stepSize": 1,
+					"mdcallback": function(x, y){
+						var func= function(dev){
+							if(dev.checkRect(x, y)){
+								return dev;
+							}
+							return false;
+						};
+						var obj= func(showRoute)|| func(showHost)|| null;
+						if(obj){
+							// $(".labdevice").css("width", "1200px");
+							$devCanvas.attr("width", "1200");
+						}
+						return obj;
+					},
+					"mucallback": function(chosenObj){
+						if(chosenObj){
+							if(chosenObj.currentRectX> 200){
+								if(chosenObj.getType()== "route"){
+									addRoute();
+									routeArray[routeArray.length-1].currentRectX= chosenObj.currentRectX- 200;
+									routeArray[routeArray.length-1].currentRectY= chosenObj.currentRectY;
+								}else{
+									if(addHost()){			
+										hostArray[hostArray.length-1].currentRectX= chosenObj.currentRectX- 200;
+										hostArray[hostArray.length-1].currentRectY= chosenObj.currentRectY;
+									}else{
+										alert("主机数量已达上限!");
+									}
+								}
+								redrawRect();
+							}
+
+							chosenObj.currentRectX= chosenObj.initialRectX;
+							chosenObj.currentRectY= chosenObj.initialRectY;
+							$devCanvas.attr("width", "200");
+							devRedrawRect();
+						}
+						return false;
+					},
+					"rdcallback": devRedrawRect
+				});
+				devCanvasMouseHandler.bind($devCanvas);
+
+
+				routeArray= new Array();
+				segArray= new Array();
+				hostArray= new Array();  
+				showRoute= new Route();
+				showRoute.currentRectX= 10;
+				showRoute.currentRectY= 50;
+				showRoute.initialRectX= 10;
+				showRoute.initialRectY= 50;
+				showHost= new Host();
+				showHost.currentRectX= 10;
+				showHost.currentRectY= 150;
+				showHost.initialRectX= 10;
+				showHost.initialRectY= 150;
+				if(confirm("要加载之前的记录吗？")){
+					//加载之前的结果和读取的行为是一样的.
+					Load(false);
+				}else{
+					return false;
+				}
+            });                         
+			 
+			function addRoute(){		
+				var route= new Route();
+				route.setID("r"+ routeArray.length);
+				routeIDCount++;
+				routeArray.push(route);
+			}  
+			function findProperRouteID(){
+				var maxRouteID= 0;
+				var find= true;
+				for(var i= 0; i< routeArray.length; i++){
+					if(parseInt(routeArray[i].getID().substring(1))> maxRouteID){
+						maxRouteID= parseInt(routeArray[i].getID().substring(1));
+					}
+				}
+				for(var i= 0; i< maxRouteID; i++){
+					find= true;
+					for(var j= 0; j< routeArray.length; j++){
+						if(parseInt(routeArray[j].getID().substring(1))== i){
+							find= false;
+						}
+					}
+					if(find){
+						return i;
+					}
+				}
+				return maxRouteID+ 1;
+			}
+
+			function addHost(){	
+				if(HostCount< 2){
+					var host= new Host();
+					host.setID("h"+ hostArray.length.toString());
+					hostArray.push(host);
+					HostCount++;
+					return true;
+				}
+				return false;
+			} 
+			function deleteRoute(route){
+				for(var j= 0; j< segArray.length; j++){
+					if(segArray[j].conObj1.getID()== route.getID()){
+						for(var k= 0; k< segArray[j].conObj2.info.segID_Array.length; k++){
+							if(segArray[j].conObj2.info.segID_Array[k]
+								== segArray[j].getID()){	
+								segArray[j].conObj2.info.segID_Array= removeArrayEle(segArray[j].conObj2.info.segID_Array, k);
+								segArray[j].conObj2.info.IP_Array= removeArrayEle(segArray[j].conObj2.info.IP_Array, k);
+								segArray[j].conObj2.info.MaskIP_Array= removeArrayEle(segArray[j].conObj2.info.MaskIP_Array, k);
+								break;
+							}
+						}
+						segArray= removeArrayEle(segArray, j);
+						j--;
+					}else if(segArray[j].conObj2.getID()== route.getID()){
+						for(var k= 0; k< segArray[j].conObj1.info.segID_Array.length; k++){
+							if(segArray[j].conObj1.info.segID_Array[k]
+								== segArray[j].getID()){
+								segArray[j].conObj1.info.segID_Array= removeArrayEle(segArray[j].conObj1.info.segID_Array, k);
+								segArray[j].conObj1.info.IP_Array= removeArrayEle(segArray[j].conObj1.info.IP_Array, k);
+								segArray[j].conObj1.info.MaskIP_Array= removeArrayEle(segArray[j].conObj1.info.MaskIP_Array, k);
+								break;
+							}
+						}
+						segArray= removeArrayEle(segArray, j);
+						j--;
+					}
+				}
+				var id= parseInt(route.getID().substring(1));
+				
+				var tempArray= route.info.segID_Array;   //存放了我将要删除的路由牵扯到的SEG
+				var tempArrayRe= new Array();
+				while(tempArray.length> 0){
+					var maxID= 0;
+					var index= 0;
+					for(var j= 0; j< tempArray.length; j++){
+						if(parseInt(tempArray[j].substring(1))> maxID){
+							maxID= parseInt(tempArray[j].substring(1));
+							index= j;
+						}
+					}
+					tempArrayRe.push(maxID);
+					tempArray= removeArrayEle(tempArray, index);
+				}
+				var p= 0; //循环一次要减个1， 因为是从小开始减的
+				for(var j= tempArrayRe.length- 1; j>= 0; j--){
+					for(var k= 0; k< segArray.length; k++){
+						if(parseInt(segArray[k].getID().substring(1))> (tempArrayRe[j]- p)){
+							var sid= parseInt(segArray[k].getID().substring(1));
+							for(var l= 0; l< segArray[k].conObj1.info.segID_Array.length; l++){
+								if(segArray[k].conObj1.info.segID_Array[l]== ("s"+ sid)){
+									segArray[k].conObj1.info.segID_Array[l]= "s"+ (sid- 1);
+								}
+							}
+							for(var l= 0; l< segArray[k].conObj2.info.segID_Array.length; l++){
+								if(segArray[k].conObj2.info.segID_Array[l]== ("s"+ sid)){
+									segArray[k].conObj2.info.segID_Array[l]= "s"+ (sid- 1);
+								}
+							}
+							segArray[k].setID("s"+ (sid- 1));
+						}
+					}
+					p++;
+				}
+				for(var j= 0; j< routeArray.length; j++){
+					if(parseInt(routeArray[j].getID().substring(1))> id){
+						routeArray[j].setID("r"+ (parseInt(routeArray[j].getID().substring(1))- 1));
+					}
+				}
+				var i= -1;
+				for(i= 0; i< routeArray.length; i++){
+					if(routeArray[i]== route){
+						break;
+					}
+				}
+				route.devDiv.remove();
+				routeArray= removeArrayEle(routeArray, i);
+				redrawRect();		
+			}
+
+			function ConnectMode(){
+				/*
+					切换至连接模式.
+					改变界面, 改变绑定的鼠标回调事件.
+					在这里注册连接, 删除连接的点击事件.
+					改变被选中设备的图片. 在退出连接模式时, 要改回来.
+					被选中对象是函数的属性, 方便持久话.
+					可以使用chosenObj的闭包. 避免使用全局变量.
+				*/
+
+				var func= function(name){
+					/*
+						帮助辨别是路由设备还是主机.
+						输入为设备名, 输出为路由设备(true), 主机(false);
+					*/
+					var regx= /^r\d+$/; //检测r开头的字符串.
+					if(regx.test(name)){
+						return true;
+					}else{
+						return false;
+					}
+				};
+
+				var getImg= function(obj, chosen){
+					/*
+						帮助生成图片.
+						输入为设备对象, 以及是否选中.
+					*/
+					var img= new Image();
+					if(chosen){ //返回被选中状态的图片.
+						if(func(obj.getID())){
+							//返回true为路由
+							img.src= "/static_media/picture/chosen_route.jpg";
+						}else{
+							//返回false为主机
+							img.src= "/static_media/picture/chosen_diannao.jpg";
+						}
+					}else{
+						if(func(obj.getID())){
+							//返回true为路由
+							img.src= "/static_media/picture/route.jpg";
+						}else{
+							//返回false为主机
+							img.src= "/static_media/picture/diannao.jpg";
+						}
+					}
+					return img;
+				}
+
+
+				//新的点击接口函数.
+				var newClick= function(){
+					if(ConnectMode.chosenObj1== undefined){
+						ConnectMode.chosenObj1= this;
+						this.img= getImg(this, true);
+					}else if(ConnectMode.chosenObj1== this){
+						this.img= getImg(this, false);
+						ConnectMode.chosenObj1= undefined;
+					}else if(ConnectMode.chosenObj2== undefined){
+						ConnectMode.chosenObj2= this;
+						this.img= getImg(this, true);
+					}else if(ConnectMode.chosenObj2== this){
+						this.img= getImg(this, false);
+						ConnectMode.chosenObj2= undefined;
+					}else{
+						alert("最多只能选择两个设备!");
+					}
+					redrawRect();
+				};
+
+				//html对象
+				var con= $("#connector");
+				var connect= $("#connect");
+				var deleteCon= $("#deleteCon");
+				var labdevicemask= $(".labdevicemask");
+
+
+				if(Con_Mode){ //Con_Mode为true则说明正在连接模式, 这里应该执行关闭连接模式逻辑.
+
+					//隐藏控件, 取消绑定事件.
+					connect.css("display", "none");
+					connect.unbind("click");
+					deleteCon.css("display", "none");
+					deleteCon.unbind("click");
+					labdevicemask.css("display", "none");
+
+					Con_Mode= false;
+
+					//将鼠标点击接口替换回来.
+					for(var i= 0; i< routeArray.length; i++){
+						routeArray[i].click= ConnectMode.oldClick;
+						routeArray[i].rightClick= ConnectMode.oldRightClick;
+					}
+					for(var i= 0; i< hostArray.length; i++){
+						hostArray[i].click= ConnectMode.oldClick;
+						hostArray[i].rightClick= ConnectMode.oldRightClick;
+					}
+
+					ConnectMode.oldClick= undefined;
+					ConnectMode.oldRightClick= undefined;
+
+					//将图片设置为未被选中的状态.
+					if(ConnectMode.chosenObj1){
+						ConnectMode.chosenObj1.img= getImg(ConnectMode.chosenObj1, false);
+						ConnectMode.chosenObj1= undefined;
+					}
+					if(ConnectMode.chosenObj2){
+						ConnectMode.chosenObj2.img= getImg(ConnectMode.chosenObj2, false);
+						ConnectMode.chosenObj2= undefined;
+					}
+
+					//将鼠标移动回调替换回来.
+					mainCanvasMouseHandler.init({
+						"mmcallback": function(){}
+					});
+
+					con.text("选择连接");
+				}else{ //执行打开连接模式逻辑.
+
+					//显示控件, 并绑定点击事件.
+					connect.css("display", "inline");
+					connect.click(function(e){
+						var event= e|| window.event;
+						Connect(ConnectMode.chosenObj1, ConnectMode.chosenObj2);
+					});
+					deleteCon.css("display", "inline");
+					deleteCon.click(function(e){
+						var event= e|| window.event;
+						DeleteConnect(ConnectMode.chosenObj1, ConnectMode.chosenObj2);
+					});
+					labdevicemask.css("display", "block");
+
+					Con_Mode= true;
+
+					//存储旧的点击事件接口.
+					ConnectMode.oldClick= (new Device()).click;
+					ConnectMode.oldRightClick= (new Device()).rightClick;
+
+					//赋值新的点击接口事件. 右键点击屏蔽.
+					for(var i= 0; i< routeArray.length; i++){
+						routeArray[i].click= newClick;
+						routeArray[i].rightClick= undefined;
+					}
+					for(var i= 0; i< hostArray.length; i++){
+						hostArray[i].click= newClick;
+						hostArray[i].rightClick= undefined;
+					}
+
+					//屏蔽鼠标移动回调.
+					mainCanvasMouseHandler.init({
+						"mmcallback": function(){
+							return false;
+						}
+					});
+
+					con.text("完　成");
+				}
+				redrawRect();
+			}
+
+			function DeleteConnect(obj1, obj2){
+				var func= function(obj, id){
+					/*
+						删除传入设备中, 为该id网段的所有相关信息. 包括ip 子网掩码等.
+					*/
+
+					var info= obj.info;
+					for(var i= 0; i< info.segID_Array.length; i++){
+						if(info.segID_Array[i]== id){
+							info.segID_Array= removeArrayEle(info.segID_Array, i);
+							info.IP_Array= removeArrayEle(info.IP_Array, i);
+							info.MaskIP_Array= removeArrayEle(info.MaskIP_Array, i);
+							break;
+						}
+					}	
+				};
+
+				var gt= function(id1, id2){
+					/*
+						比较id1和id2的大小
+						id1>id2返回true
+						id1<id2返回false
+					*/
+
+					if(id1.substring(1)> id2.substring(1)){
+						return true;
+					}else{
+						return false;
+					}
+				}
+
+				var minus= function(id){
+					/*
+						将id减小一号
+					*/
+					return "s"+ (parseInt(id.substring(1))- 1).toString();
+				}
+
+				if(obj1&& obj2){ //两个设备都选中才执行逻辑.
+
+					//找出需要删除的连接.
+					for(var i= 0; i< segArray.length; i++){
+						if((segArray[i].conObj1.getID()== obj1.getID()&& segArray[i].conObj2.getID()== obj2.getID())||
+							(segArray[i].conObj1.getID()== obj2.getID()&& segArray[i].conObj2.getID()== obj1.getID())){
+
+							//找到该网段. 两边断点删除记录的该网段信息.
+							func(obj1, segArray[i].getID());
+							func(obj2, segArray[i].getID());
+
+							//将之后网段的ID号依次上移.
+							for(var j= 0; j< segArray.length; j++){
+								//gt返回true说明找到了比要删除连接id大的连接. 要执行逻辑.
+								if(gt(segArray[j].getID(), segArray[i].getID())){
+									var oldID= segArray[j].getID();
+									var newID= minus(oldID);
+									//修改网段号.
+									segArray[j].setID(newID);
+
+									//修改于该网段相关的设备中存储的网段号.
+									for(var k= 0; k< segArray[j].conObj1.info.segID_Array.length; k++){
+										if(segArray[j].conObj1.info.segID_Array[k]== oldID){
+											segArray[j].conObj1.info.segID_Array[k]= newID;
+										}
+									}
+									for(var k= 0; k< segArray[j].conObj2.info.segID_Array.length; k++){
+										if(segArray[j].conObj2.info.segID_Array[k]== oldID){
+											segArray[j].conObj2.info.segID_Array[k]= newID;
+										}
+									}
+								}
+							}
+
+							//删除该网段
+							segArray= removeArrayEle(segArray, i);
+							redrawRect();
+							return;
+						}
+					}
+
+					alert("选中的设备间不存在连接!");
+				}else{
+					alert("请选中两个设备之后, 再删除连接!");
+				}
+			}
+			function removeArrayEle(array, index){
+				if(index< array.length){
+					array.splice(index, 1);
+				}
+				return array;
+			}
+
+			function Connect(obj1, obj2){
+				/*
+					用来创造连接的函数.
+					输入为两个设备. 只有再全不为空的情况才执行逻辑.
+					首先进行判断, 两个设备间是否已经存在连接. 若是, 则退出.
+					否则创建连接. 并加入连接队列.
+				*/
+				if(obj1&& obj2){
+					//判断连接两端的设备是否和传入的两个设备相同. 如果是, 说明传入的两个设备间已经存在
+					for(var i= 0; i< segArray.length; i++){
+						if((segArray[i].conObj1.getID()== obj1.getID()&& segArray[i].conObj2.getID()== obj2.getID())||
+							(segArray[i].conObj2.getID()== obj1.getID()&& segArray[i].conObj1.getID()== obj2.getID())){
+							alert("设备之间已经存在连接!");
+							return false;
+						}
+					}
+					var seg= new NetWorkSeg();
+					seg.setID("s"+ segArray.length);
+					if(obj1.setSegID(seg.getID())){
+						if(obj2.setSegID(seg.getID())){
+							seg.conObj1= obj1;
+							seg.conObj2= obj2;
+						}else{
+							obj1.popSegID();
+							alert("主机只可拥有一条连接!");
+							return false;
+						}
+					}else{
+						alert("主机只可拥有一条连接!");
+						return false;
+					}
+					segIDCount++;
+					seg.caculatePos(obj1.currentRectX, obj1.currentRectY, 
+							obj2.currentRectX, obj2.currentRectY);
+					segArray.push(seg);
+					redrawRect();
+				}else{
+					alert("请选中两个设备之后, 再进行连接!");
+				}
+			}
+
+			function findProperSegID(){
+				var maxSegID= 0;
+				var find= true;
+				for(var i= 0; i< segArray.length; i++){
+					if(parseInt(segArray[i].getID().substring(1))> maxSegID){
+						maxSegID= parseInt(segArray[i].getID().substring(1));
+					}
+				}
+				for(var i= 0; i< maxSegID; i++){
+					find= true;
+					for(var j= 0; j< segArray.length; j++){
+						if(parseInt(segArray[j].getID().substring(1))== i){
+							find= false;
+						}
+					}
+					if(find){
+						return i;
+					}
+				}
+				return maxSegID+ 1;
+			}
+			function redrawRect(){
+				mainCt.clearRect(0, 0, MAIN_CANVAS_WIDTH, MAIN_CANVAS_HEIGHT); 
+				if(Con_Mode){	
+					mainCt.fillStyle= "#1A5091";
+					mainCt.fillRect(0, 0, MAIN_CANVAS_WIDTH, MAIN_CANVAS_HEIGHT);
+				}
+				for(var i= 0; i< routeArray.length; i++){
+					routeArray[i].draw(mainCt);
+				}
+				for(var i= 0; i< segArray.length; i++){
+					segArray[i].draw(mainCt);
+				}
+				for(var i= 0; i< hostArray.length; i++){
+					hostArray[i].draw(mainCt);
+				}
+            }  
+            function devRedrawRect(){
+            	$devCt.clearRect(0, 0, $devCanvas.attr("width"), $devCanvas.attr("height"));
+            	showRoute.draw($devCt);
+            	showHost.draw($devCt);
+            }
+			function makeJSON(){
+				var JSONObj= {
+					"JSON": "JSON"
+				};
+				//用于求节点数量 ----------------------------------------------
+				var nodeArray= [];
+				var count= 0;
+				for(var i= 0; i< segArray.length; i++){
+					for(count= 0; count< nodeArray.length; count++){
+						if(segArray[i].conObj1.getID()== nodeArray[count]){
+							count= nodeArray.length+ 1;
+						}
+					}
+					if(count== nodeArray.length){
+						nodeArray.push(segArray[i].conObj1.getID());
+					}
+					count= 0;
+					for(count= 0; count< nodeArray.length; count++){
+						if(segArray[i].conObj2.getID()== nodeArray[count]){
+							count= nodeArray.length+ 1;
+						}
+					}
+					if(count== nodeArray.length){
+						nodeArray.push(segArray[i].conObj2.getID());
+					}
+					count= 0;
+				}
+				//-----------------------------------------------------------
+				var data= [];
+				for(var i= 0; i< segArray.length; i++){
+					data.push(segArray[i].makeJSON());
+				}
+				JSONObj["DATA"]= data;
+				JSONObj["NodeCount"]= nodeArray.length;
+				return JSONObj;
+			}
+			function makeJSONForSave(){
+				var JSONObj= {
+					"JSON": "JSON"
+				};
+				var hostdataArray= [];
+				for(var i= 0; i< hostArray.length; i++){
+					var o= hostArray[i].makeJSONForSave();
+					hostdataArray.push(o);
+				}
+				JSONObj["HostData"]= hostdataArray;
+				var routedataArray= [];
+				for(var i= 0; i< routeArray.length; i++){
+					var o= routeArray[i].makeJSONForSave();
+					routedataArray.push(o);
+				}
+				JSONObj["RouteData"]= routedataArray;
+				var segdataArray= [];
+				for(var i= 0; i< segArray.length; i++){
+					var o= segArray[i].makeJSONForSave();
+					segdataArray.push(o);
+				}
+				JSONObj["SegData"]= segdataArray;
+				return JSONObj;
+			}
+			function checkExpCondition(){
+				return true;
+			}
+			function Submit(){
+				var InitDraw= function(ct){
+					for(var i= 0; i< routeArray.length; i++){
+						var x= parseInt(routeArray[i].currentRectX);
+						var y= parseInt(routeArray[i].currentRectY);
+						var img= routeArray[i].img;
+						ct.drawImage(img, x, y, IMG_WIDTH, IMG_HEIGHT);
+					}
+					for(var i= 0; i< hostArray.length; i++){
+						var x= parseInt(hostArray[i].currentRectX);
+						var y= parseInt(hostArray[i].currentRectY);
+						var img= hostArray[i].img;
+						ct.drawImage(img, x, y, IMG_WIDTH, IMG_HEIGHT);
+					}
+					for(var i= 0; i< segArray.length; i++){
+						ct.beginPath();
+						ct.strokeStyle= "red";
+						ct.moveTo(segArray[i].startX, segArray[i].startY);
+						ct.lineTo(segArray[i].endX, segArray[i].endY);
+						ct.stroke();
+					}
+				}
+
+				var func= function(id){
+					var regx= /^r\d+$/;
+					if(regx.test(id)){
+						id= "r"+ (parseInt(id.substring(1))- 2).toString();
+					}
+					return id;
+				}
+
+				var find= function(id){
+					var regx= /^r\d+$/;
+					if(regx.test(id)){
+						for(var i= 0; i< routeArray.length; i++){
+							if(routeArray[i].getID()== id){
+								return routeArray[i];
+							}
+						}
+					}else{
+						for(var i= 0; i< hostArray.length; i++){
+							if(hostArray[i].getID()== id){
+								return hostArray[i];
+							}
+						}
+					}
+				}
+
+				var type= function(id){
+					var regx= /^r\d+$/;
+					if(regx.test(id)){
+						return true;
+					}else{
+						return false;
+					}
+				}
+
+				var startAnim= function(array, ct, cb){
+					if(array.length=== 0){
+						alert("动画结束!");
+						cb();
+						return;
+					}
+					var item= array.shift();
+					var item1= item.item1;
+					var item2= item.item2;
+					item1.dev= find(func(item1.NODE));
+					item2.dev= find(func(item2.NODE));
+					var img= new Image();
+					if(type(item1.dev.getID())){
+						img.src= "/static_media/picture/chosen_route.jpg";
+					}else{
+						img.src= "/static_media/picture/chosen_diannao.jpg";
+					}
+					ct.drawImage(img, parseInt(item1.dev.currentRectX), parseInt(item1.dev.currentRectY), IMG_WIDTH, IMG_HEIGHT);
+					setTimeout(function(){
+						InitDraw(ct);
+						$($(".resulttext li").get(0)).remove();
+						$(".resulttext li:first").css("color", "red");
+						var seg= undefined;
+						var sx= 0, sy= 0, ex= 0, ey= 0; //头尾端点
+						for(var i= 0; i< segArray.length; i++){
+							if((segArray[i].conObj1== item1.dev&& segArray[i].conObj2== item2.dev)||
+								segArray[i].conObj2== item1.dev&& segArray[i].conObj1== item2.dev){
+								seg= segArray[i];
+								break;
+							}
+						}
+						if(item1.dev.currentRectX> item2.dev.currentRectX){
+							sx= seg.endX; sy= seg.endY;
+							ex= seg.startX; ey= seg.startY;
+						}else if(item1.dev.currentRectX== item2.dev.currentRectX){
+							if(item1.dev.currentRectY> item2.dev.currentRectY){
+								sx= seg.endX; sy= seg.endY;
+								ex= seg.startX; ey= seg.startY;
+							}else{
+								sx= seg.startX; sy= seg.startY;
+								ex= seg.endX; ey= seg.endY;
+							}
+						}else{
+							sx= seg.startX; sy= seg.startY;
+							ex= seg.endX; ey= seg.endY;
+						}
+						ratio= ((ey- sy)* 1.0)/ ((ex- sx)* 1.0);
+						// distance= Math.pow((ey- sy)* (ey- sy)+ (ex- sx)* (ex- sx), 0.5);
+						var dy= (ey- sy)* 1.0/ 20, dx= (ex- sx)* 1.0/ 20;
+						setTimeout(function(){
+							ct.beginPath();
+							ct.strokeStyle= "#00ff00";
+							ct.moveTo(sx, sy);
+							var func= function(){
+								ct.lineTo(ex, ey);
+								ct.stroke();
+								setTimeout(function(){
+									InitDraw(ct);
+									$($(".resulttext li").get(0)).remove();
+									$(".resulttext li:first").css("color", "red");
+									var img= new Image();
+									if(type(item2.dev.getID())){
+										img.src= "/static_media/picture/chosen_route.jpg";
+									}else{
+										img.src= "/static_media/picture/chosen_diannao.jpg";
+									}
+									ct.drawImage(img, parseInt(item2.dev.currentRectX), parseInt(item2.dev.currentRectY), IMG_WIDTH, IMG_HEIGHT);
+									setTimeout(function(){
+										startAnim(array, ct, cb);
+										$($(".resulttext li").get(0)).remove();
+										$(".resulttext li:first").css("color", "red");
+									}, 2000);
+								}, 100);
+							};
+							if(dx> 0&&sx+ dx> ex){
+								func()
+								return;
+							}else if(dx== 0){
+								if(dy> 0&& sy+ dy> ey){
+									func();
+									return;
+								}else if(dy< 0&& sy+ dy< ey){
+									func();
+									return;
+								}
+							}else if(dx< 0&& sx+ dx< ex){
+								func();
+								return;
+							}else{
+								ct.lineTo(sx+ dx, sy+ dy);
+							}
+							ct.stroke();
+							sx+= dx; sy+= dy;
+							setTimeout(arguments.callee, 100);
+						}, 100);
+					}, 2000);
+				};
+
+				if(checkExpCondition()){
+					var JSONObj= makeJSON();
+					var $loading= $('.loading');
+					var $word= $('.loadingword');
+					$word.text("执行中...");
+					$.get("/mysite/ajaxdynamicrouteexp/?data="+ JSON.stringify(JSONObj)+ "&id="+ ExpID.toString(), function(data){
+						$word.css('display', 'none');
+						if(data== 'failed'){
+							alert("执行错误!");
+							$loading.css("display", "none");
+						}else{
+							var $resultpaper= $(".resultpaper");
+							$resultpaper.css("display", "block");
+							var $canvas= $resultpaper.children("canvas");
+							var ct= $canvas.get(0).getContext("2d");
+
+							//初始化, 把设备画上去.
+							InitDraw(ct);
+							console.log(data);
+							var JSONObj= JSON.parse(data);
+							var animStack= [];
+							var liStack= [];
+
+							//把事件流程推到栈里.
+							for(var i= 0; i< JSONObj.ARRAY.length; i= i+ 2){
+								var item1= JSONObj.ARRAY[i];
+								var item2= JSONObj.ARRAY[i+ 1];
+								animStack.push({
+									"item1": item1,
+									"item2": item2
+								});
+								var li= $("<li></li>");
+								var l= li.clone();
+								var st= type(item1.NODE)? "路由": "主机";
+								var sn= "("+ func(item1.NODE).toString()+ ")";
+								var sa= type(item1.NODE)? "转发": "发送";
+								var sp= item1.PROTOCAL;
+								var regx= /request$/;
+								var sr= regx.test(item1.EXTRAINFO)? "请求": "回应";
+								l.text(st+ sn+ sa+ sp+ sr);
+								liStack.push(l);
+								l= li.clone();
+								l.text("数据传输中...");
+								liStack.push(l);
+								st= type(item2.NODE)? "路由": "主机";
+								sn= "("+ func(item2.NODE).toString()+ ")";
+								sa= "接受";
+								sp= item2.PROTOCAL;
+								sr= regx.test(item1.EXTRAINFO)? "请求": "回应";
+								l= li.clone();
+								l.text(st+ sn+ sa+ sp+ sr);
+								liStack.push(l);
+							}
+
+							var $ul= $(".resulttext");
+							for(var i= 0; i< liStack.length; i++){
+								$ul.append(liStack[i]);
+							}
+							$(".resulttext li:first").css("color", "red");
+
+							startAnim(animStack, ct, function(){
+								$loading.css("display", "none");
+								$resultpaper.css("display", "none");
+							});
+						}
+					});
+					$loading.css('display', 'block');
+					$word.css('display', 'block');
+				}else{
+					return false;
+				}
+			} 
+			function Save(){
+				if(confirm("确认要保存吗？ 保存后会覆盖之前的记录")){
+					var $loading= $('.loading');
+					var $word= $('.loadingword');
+					$word.text("保存中...");
+					var JSONObj= makeJSONForSave();
+					$.get("/mysite/ajaxsave/?data="+JSON.stringify(JSONObj)+ "&id="+ ExpID.toString(), function(data){
+						$loading.css('display', 'none');
+						$word.css('display', 'none');
+						if(data== 'failed'){
+							alert("保存失败!");
+						}else{
+							alert("保存成功!");
+						}
+					});
+					$loading.css('display', 'block');
+					$word.css('display', 'block');
+				}else{
+					return false;
+				}
+			}
+			function Load(){
+				if(arguments[0]){
+					if(!confirm("读取记录会使现在的数据丢失， 确定读取？")){
+						return false;
+					}
+				}			
+				var $loading= $('.loading');
+				var $word= $('.loadingword');
+				$word.text("读取中...");
+				$.get("/mysite/ajaxload/", {
+					"id": ExpID
+				}, function(data){
+					$loading.css('display', 'none');
+					$word.css('display', 'none');
+					if(data== 'failed'){
+						alert("读取失败!");
+					}else{				
+						reLoad= true;
+						preLoad= false;
+						reLoadStr= data;
+						reLoadStr= reLoadStr.replace(/&quot;/g, '"');
+						PageInit();
+					}
+				});
+				$loading.css('display', 'block');
+				$word.css('display', 'block');
+			}
+			function Exit(){
+				if(confirm("确认要退出？ 建议在推出前先保存")){
+					var $form= $("#menu");
+					window.location.href= "/mysite/admin/";
+				}else{
+					return false;
+				}
+			}
+		</script>       
+	<body>
+		<section class= "hostDevDiv" style= "display: none;">
+			<p class= "devID">设备号: <span>Null</span></p>
+			<p class= "devType">设备类型: <span>Null</span></p>
+			<p class= "devIP">设备IP: <span>Null</span></p>
+			<p class= "devMask">设备子网掩码: <span>Null</span></p>
+		</section>	
+
+		<section class= "routeDevDiv" style= "display: none;">
+			<p class= "devID">设备号: <span>Null</span></p>
+			<hr/>
+			<section class= "devSection">
+				<p class= "segNumber">网段<span>Null</span></p>
+				<p class= "devIP">设备IP: <span>Null</span></p>
+				<p class= "devMask">设备子网掩码: <span>Null</span></p>
+				<hr/>
+			</section>
+			<section class= "devRtr">
+				<p class= "devIP">目的IP地址: <span>Null</span></p>
+				<p class= "devMask">子网掩码: <span>Null</span></p>
+				<p class= "devNexthop">下一跳: <span>Null</span></p>
+				<hr/>
+			</section>
+		</section>
+
+		<section class= "hostConf" style= "display: none; text-align: center;">
+			<h1>主机配置</h1>
+			<hr/>
+			<div class="form-group" style= "margin-bottom: 25px;">
+				<label for="inputPassword3" class="col-sm-3 control-label">IP地址: </label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" id= "hostIP" placeholder="IP">
+				</div>
+				<div style= "clear: both;"></div>
+			</div>
+			<div class="form-group" style= "margin-bottom: 25px;">
+				<label for="inputPassword3" class="col-sm-3 control-label">子网掩码: </label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" id= "hostMask" placeholder="子网掩码">
+				</div>
+				<div style= "clear: both;"></div>
+			</div> 
+			<div class="radio-inline">
+				<label>
+					<input type="radio" name="type" id="optionsRadios1" value="host"> 源设备
+				</label>
+			</div>
+			<div class="radio-inline">
+				<label>
+					<input type="radio" name="type" id="optionsRadios2" value="normal"> 普通设备
+				</label>
+			</div>
+			<div class="radio-inline">
+				<label>
+					<input type="radio" name="type" id="optionsRadios2" value="target"> 目标设备
+				</label>
+			</div>
+			<div style= "clear: both;"></div>
+			<div style= "margin-top: 25px;">
+				<button class= "btn btn-primary closebtn" style= "margin-right: 10px">填写完成</button>
+				<button class= "btn btn-primary exitbtn">直接关闭</button>
+			</div>
+		</section>
+
+		<section class= "routeConf" style= "display: none; text-align: center;">
+			<h4>路由器配置</h4>
+			<hr/>
+			<section class= "changeableSection">
+				<section class= "segSection">
+					<p class= "segID">网段<span>Null</span></p>			
+					<div class="form-group" style= "margin-bottom: 5px;">
+						<label for="routeIP" class="col-sm-3 control-label">IP地址: </label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control" id= "routeIP" placeholder="IP">
+						</div>
+						<div style= "clear: both;"></div>
+					</div>
+					<div class="form-group" style= "margin-bottom: 5px;">
+						<label for="routeMask" class="col-sm-3 control-label">子网掩码: </label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control" id= "routeMask" placeholder="子网掩码">
+						</div>
+						<div style= "clear: both;"></div>
+					</div> 
+					<hr/>
+				</section>
+				<section class= "rtrSection">
+					<div class="form-group" style= "margin-bottom: 5px;">
+						<label for="rtrTargetIP" class="col-sm-3 control-label">目的IP地址: </label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control" id= "rtrTargetIP" placeholder="目的IP地址">
+						</div>
+						<div style= "clear: both;"></div>
+					</div> 
+					<div class="form-group" style= "margin-bottom: 5px;">
+						<label for="rtrMask" class="col-sm-3 control-label">子网掩码: </label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control" id= "rtrMask" placeholder="子网掩码">
+						</div>
+						<div style= "clear: both;"></div>
+					</div> 
+					<div class="form-group" style= "margin-bottom: 5px;">
+						<label for="rtrNextHip" class="col-sm-3 control-label">下一跳: </label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control" id= "rtrNextHip" placeholder="下一跳">
+						</div>
+						<div style= "clear: both;"></div>
+					</div> 
+					<button class= "btn btn-primary btn-sm deleterowbtn">删除路由表项</button>
+					<hr/>
+				</section>
+			</section>
+			<div style= "clear: both;"></div>
+			<button class= "btn btn-primary btn-sm addrowbtn">添加路由表项</button>
+			<div style= "margin-top: 5px; margin-bottom: 15px;">
+				<button class= "btn btn-primary closebtn" style= "margin: 0px 5px;">填写完成</button>
+				<button class= "btn btn-primary exitbtn" style= "margin: 0px 5px;">直接关闭</button>
+				<button class= "btn btn-primary deletebtn" style= "margin: 0px 5px;">删除路由</button>
+			</div>
+		</section>
+
+		<section class= "resultpaper">
+			<canvas id= "resultCanvas" width= "1000px" height= "500px" style= "float: left;"></canvas>
+			<ul class= "resulttext" style= "float: left;"></ul>
+			<div style= "clear: both;"></div>
+		</section>
+
+		<section class= 'loading'></section>
+		<p class= 'loadingword'>读取中...</p>
+
+ 		<header>
+        	在线虚拟网络实验室
+        </header>
+		<section class= 'labpaper'>
+			<section class= 'labdevice'>
+			    <canvas id= "devCanvas" width= "200" height= "500"></canvas>
+			</section>
+			<section class= "labdevicemask"></section>
+			<section class= 'labarea'>
+			    <canvas id= "canvas" width= "1000" height= "500"></canvas>
+			</section>
+			<div style= 'clear: both;'></div>
+		</section>
+		<section class= "labcontrolbar">
+			<button class= "btn btn-primary" id= "connector" onclick= "ConnectMode()">连接模式</button>
+			<button class= "btn btn-primary" id= "connect" style= "display: none;">连接</button>
+			<button class= "btn btn-primary" id= "deleteCon" style= "display: none;">删除连接</button>
+			<button class= "btn btn-primary" id= "mysubmit" onclick= "Submit()">进行实验</button>
+			<button class= "btn btn-primary" id= "save" onclick= "Save()">保存实验</button>
+			<button class= "btn btn-primary" id= "load" onclick= "Load()">读取实验</button>
+			<button class= "btn btn-primary" id= "exit" onclick= "Exit()">退出实验</button>
+		</section>
+    </body>
+</html>

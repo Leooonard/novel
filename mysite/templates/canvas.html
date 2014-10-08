@@ -1,0 +1,114 @@
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>HTML5示例</title>
+	<style type="text/css">
+		#container{border:1px solid #ccc;width:800px;height:400px;position:relative;}
+		canvas{position:absolute;top:0px;left:0px;z-index:1;}
+	</style>
+	</head>
+	<body>
+		<div id="container">
+			<canvas id="canvas" width="800" height="400"></canvas>
+			<canvas id="canvas_temp" style="z-index:2;" width="800" height="400"></canvas>
+		</div>
+		<select id="tools">
+			<option value="pen">铅笔</option>
+			<option value="line">直线</option>
+			<option value="rect">矩形</option>
+			<option value="circle">圆形</option>
+		</select>
+	<script type="text/javascript"> 
+		var canvas= document.getElementById('canvas');
+		var context= canvas.getContext('2d');
+		var canvas2= document.getElementById('canvas_temp');
+		var context2= canvas2.getContext('2d');
+		var tools= document.getElementById('tools');
+		tools.onchange= function (e){ 
+			tool[this.value]();
+		};
+		var tool = {
+			pen:function (){
+				this.reset();
+				canvas2.onmousedown= function (e){
+					context2.moveTo(e.layerX,e.layerY);
+					canvas2.onmousemove= function (e){
+						context2.lineTo(e.layerX, e.layerY);
+						context2.stroke();
+					};
+					canvas2.onmouseup=function (e){
+						canvas2.onmousemove=null;
+						canvas2.onmouseup=null;
+						tool.updata();
+					};
+				};
+			},
+			line:function (){
+				this.reset();
+				canvas2.onmousedown= function (e){
+					var e2= e; 
+					canvas2.onmousemove= function (e){ 
+						context2.clearRect(0, 0, canvas.width, canvas.height);
+						context2.beginPath();
+						context2.moveTo(e2.layerX, e2.layerY);
+						context2.lineTo(e.layerX, e.layerY);
+						context2.stroke();
+						context2.closePath();
+					} 
+					canvas2.onmouseup= function (e){
+						canvas2.onmousemove= null;
+						canvas2.onmouseup= null;
+						tool.updata();
+					}; 
+				}; 
+			},
+			rect:function (){
+				this.reset();
+				canvas2.onmousedown= function (e){
+					var e2= e;
+					context2.strokeStyle= "#000";
+					canvas2.onmousemove= function (e){ 
+						context2.clearRect(0, 0, canvas.width, canvas.height);
+						context2.strokeRect(e2.layerX, e2.layerY, e.layerX- e2.layerX, e.layerY- e2.layerY);
+					};
+					canvas2.onmouseup= function (e){
+						canvas2.onmousemove= null;
+						canvas2.onmouseup= null;
+						tool.updata();
+					}; 
+				} 
+			},
+			circle:function (){
+				this.reset();
+				canvas2.onmousedown= function (e){
+				var e2= e;
+					canvas2.onmousemove= function (e){ 
+						context2.clearRect(0, 0, canvas.width, canvas.height);
+						context2.beginPath();	
+						context2.arc(e2.layerX, e2.layerY, e.layerX- e2.layerX, 0, Math.PI* 2, true);
+						context2.stroke();
+						context2.closePath();
+					};
+					canvas2.onmouseup= function (e){
+						canvas2.onmousemove= null;
+						canvas2.onmouseup= null;
+						tool.updata();
+					}; 
+				} 
+			},
+			reset:function (){
+				canvas2.onmousedown= null;
+				canvas2.onmouseup= null;
+				canvas2.onmousemove= null;
+			},
+			updata:function (){ 
+				context.drawImage(canvas2, 0, 0);
+				context2.clearRect(0, 0, canvas.width, canvas.height);
+			}
+		};
+		tool['pen'](); 
+	</script>
+</body>
+</html>
+
+
