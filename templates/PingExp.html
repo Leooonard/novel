@@ -1,0 +1,303 @@
+<html>
+	<head>
+		<meta http-equiv= "content-type" content= "text/html; charset= gb2312"/>
+		<title>PING实验</title>
+	</head>
+	<script>
+		var strokeColor= "#00ff00";
+		var cX= 100;
+		var cY= 50;
+		var h1tor1Con= false;
+		var r1tor2Con= false;
+		var r2toh2Con= false;
+		var host_1_Info;
+		var host_2_Info;
+		var route_1_Info;
+		var route_2_Info;
+		var TarIPAddr;
+		var rtb1;
+		var rtb2;
+		var ys=null;
+		var firstLoad= true;
+		function hostInfo(){
+			var hostIP= "";
+			var gateIP= "";
+			this.getHostIP= function(){
+				return hostIP;
+			};
+			this.setHostIP= function(ip){
+				hostIP= ip;
+			};
+			this.getGateIP= function(){
+				return gateIP;
+			};
+			this.setGateIP= function(ip){
+				gateIP= ip;
+			};
+		}
+		function routeInfo(){
+			var segL_IP;
+			var segR_IP;
+			var routeTable;
+			this.init= function(){
+				routeTable= new Array();
+			};
+			this.getSegLIP= function(){
+				return segL_IP;
+			}
+			this.setSegLIP= function(ip){
+				segL_IP= ip;
+			};
+			this.getSegRIP= function(){
+				return segR_IP;
+			};
+			this.setSegRIP= function(ip){
+				segR_IP= ip;
+			};
+			this.getRouteTable= function(){
+				return routeTable;
+			};
+			this.setRouteTable= function(array){
+				routeTable= array;
+			};
+			this.makeRTR= function(){
+				return new routeTableRow();
+			};
+		}
+		function routeTableRow(){
+			var IP;
+			var nextSkip;
+			var distance;
+			this.init= function(i, n, d){
+				IP= i;
+				nextSkip= n;
+				distance= d;				
+			};
+			this.getIP= function(){
+				return IP;
+			};
+			this.setIP= function(ip){
+				IP= ip;
+			};
+			this.getNextSkip= function(){
+				return nextSkip;
+			};
+			this.setNextSkip= function(ns){
+				nextSkip= ns;				
+			};
+			this.getDistance= function(){
+				return distance;
+			};
+			this.setDistance= function(dst){
+				distance= dst;
+			};
+		}
+		function Init(){	
+			host_1_Info= new hostInfo();
+			host_2_Info= new hostInfo();
+			route_1_Info= new routeInfo();
+			route_1_Info.init();
+			route_2_Info= new routeInfo();
+			route_2_Info.init();
+			var cv= document.getElementById("h1tor1Canvas");
+			var ctx= cv.getContext("2d");
+			ctx.lineWidth= '3';
+			ctx.beginPath();
+			ctx.moveTo(0, cY);
+			ctx.lineTo(cX, cY);
+			ctx.stroke();
+			cv= document.getElementById("r1tor2Canvas");
+			ctx= cv.getContext("2d");
+			ctx.lineWidth= '3';
+			ctx.beginPath();
+			ctx.moveTo(0, cY);
+			ctx.lineTo(cX, cY);
+			ctx.stroke();
+			cv= document.getElementById("r2toh2Canvas");
+			ctx= cv.getContext("2d");
+			ctx.lineWidth= '3';
+			ctx.beginPath();
+			ctx.moveTo(0, cY);
+			ctx.lineTo(cX, cY);
+			ctx.stroke();
+		}
+        	function show(obj){
+                	ys=obj.bgColor;
+                	obj.bgColor="red";
+                }
+                function noshow(obj){
+                        obj.bgColor=ys;
+                }
+		function clickListener(btID){
+			if(btID== "h1"){
+				host_1_Info= window.showModalDialog("../PingHostConfDialog/"
+					, host_1_Info, "dialogWidth= 700px; dialogHeight= 400px"); 
+				Connecth1tor1(host_1_Info, route_1_Info);
+			}else if(btID== "h2"){
+				host_2_Info= window.showModalDialog("../PingHostConfDialog/"
+					, host_2_Info, "dialogWidth= 700px; dialogHeight= 400px");
+				connectr2toh2(route_2_Info, host_2_Info);	
+			}else if(btID== "r1"){
+				route_1_Info= window.showModalDialog("../PingRouteConfDialog/", route_1_Info
+						, "dialogWidth= 700px; dialogHeight= 400px"); 
+				Connecth1tor1(host_1_Info, route_1_Info);
+				Connectr1tor2(route_1_Info, route_2_Info);
+			}else if(btID== "r2"){
+				route_2_Info= window.showModalDialog("../PingRouteConfDialog/", route_2_Info
+						, "dialogWidth= 700px; dialogHeight= 400px");
+				Connectr1tor2(route_1_Info, route_2_Info);
+				Connectr2toh2(route_2_Info, host_2_Info);
+			}
+		}
+		function startExp(){
+				document.getElementById("Exp").value= "true";
+				document.getElementById("formIP").submit();
+			if((HostInfo!= null)&&(TarIPAddr!= null)){
+				document.getElementById("Exp").value= "true";
+				document.getElementById("formIP").submit();
+			}else{
+				alert("请查看目标主机IP地址后， 对Host主机IP地址进行相应的配置");
+			}
+		}
+		function Connecth1tor1(h1, r1){
+			if((h1.getGateIP().length> 0)&&(r1.getSegLIP().length> 0)){
+				if(h1.getGateIP()== r1.getSegLIP()){
+					if(!h1tor1Con){
+						h1tor1Con= true;
+						strokeColor= "#00ff00";
+						drawResult(0, 0);
+					}
+				}else{
+					if(h1tor1Con){
+						h1tor1Con= false;
+						strokeColor= "#000000";
+						drawResult(0, 0);
+					}
+				}
+			}
+		}
+		function Connectr1tor2(r1, r2){
+			if((r1.getSegRIP().length> 0)&&(r2.getSegLIP().length> 0)){
+				if(r1.getSegRIP()== r2.getSegLIP()){
+					if(!r1tor2Con){
+						r1tor2Con= true;
+						strokeColor= "#00ff00";
+						drawResult(1, 0);
+					}
+				}else{
+					if(r1tor2Con){
+						r1tor2Con= false;
+						strokeColor= "#000000";
+						drawResult(1, 0);
+					}
+				}
+			}
+		}
+		function Connectr2toh2(r2, h2){
+			if((h2.getGateIP().length> 0)&&(r2.getSegRIP().length> 0)){
+				if(h2.getGateIP()== r2.getSegRIP()){
+					if(!r2toh2Con){
+						r2toh2Con= true;
+						strokeColor= "#00ff00";
+						drawResult(2, 0);
+					}
+				}else{
+					if(r2toh2Con){
+						r2toh2Con= false;
+						strokeColor= "#000000";
+						drawResult(2, 0);
+					}
+				}
+			}
+		}
+		function drawResult(id, x){
+			var canvas;
+			switch(id){
+				case 0:
+					canvas= document.getElementById("h1tor1Canvas");
+					break;
+				case 1:
+					canvas= document.getElementById("r1tor2Canvas");
+					break;
+				case 2:
+					canvas= document.getElementById("r2toh2Canvas");
+					break;
+				default:
+					break;
+			}
+			var context= canvas.getContext("2d");
+			context.strokeStyle= strokeColor;
+			context.lineWidth= '3';
+			var xPos= x;
+			context.beginPath();
+			context.moveTo(xPos, cY);
+			xPos= xPos+ 2;
+			context.lineTo(xPos, cY);
+			context.stroke();
+			if(xPos< cX){
+				setTimeout(function(){drawResult(id, xPos)}, 50);
+			}
+		}
+	</script>
+	<body onload= "Init()">
+		<form id= "formIP" action= "../PingExp/" method= "post">
+			{% csrf_token %}
+			<p align= "center"> <font size= "+9">PING实验</font> </p>
+			<hr width= "700" size= "2" color= "#CC6600">
+			<p align= "center">
+				<button type= "button" id= "h1" onclick= "clickListener('h1')">
+					<img src= "../../diannao.jpg" width= "100" height= "100" />
+					<br>主机1
+				</button>
+				<canvas id= "h1tor1Canvas" height= "100" width= "100"></canvas>
+				<button type= "button" id= "r1" onclick= "clickListener('r1')">
+					<img src= "../../route.jpg" width= "50" height= "100"/>
+					<br>路由器1
+				</button>
+				<canvas id= "r1tor2Canvas" height= "100" width= "100"></canvas>
+				<button type= "button" id= "r2" onclick= "clickListener('r2')">
+					<img src= "../../route.jpg" width= "50" height= "100"/>
+					<br>路由器2
+				</button>
+				<canvas id= "r2toh2Canvas" height= "100" width= "100"></canvas>
+				<button type= "button" id= "h2" onclick= "clickListener('h2')">
+					<img src= "../../diannao.jpg" width= "100" height= "100" />
+					<br>主机2
+				</button>
+				<input type= "hidden" name= "hostIP" id= "hIP" /> 
+				<input type= "hidden" name= "TarIP" id= "tIP" /> 
+				<input type= "hidden" name= "sExp" id= "Exp" />
+			</p>
+			<p> <br/> </p>
+			<p align= "center">
+				<button type= "button" onclick= "startExp()">	
+					开始实验
+				</button>
+			</p>
+			{% if showTable %}
+				<table marginTop= "200px" border= "1" width= "800" align= "center">
+					<tr  bgcolor= "#cccccc">
+						<td> 数据包 </td>
+						<td> 长度(BYTE) </td>
+						<td> 协议 </td>
+						<td> 源IP地址 </td>
+						<td> 目标IP地址 </td>
+						<td> 附加信息 </td>
+					</tr>
+					{% for pcap in pcapPack %}
+						<tr bgcolor= "#ffffff">
+							<td> {{pcap.dataNum}} </td>
+							<td> {{pcap.Length}} </td>
+							<td> {{pcap.proto}} </td>
+							<td> {{pcap.srcIP}} </td>
+							<td> {{pcap.dstIP}} </td>
+							<td> {{pcap.info}} </td>
+						</tr>
+					{% endfor %}
+				</table>
+			{% endif %}
+		</form>	
+	</body>
+</html>
+
+

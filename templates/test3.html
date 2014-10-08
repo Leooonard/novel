@@ -1,0 +1,255 @@
+<!doctype html>
+<html>
+	<link rel="stylesheet" type="text/css" href="../../static_media/css/joint.css">
+	<link rel="stylesheet" href="http://cdn.bootcss.com/twitter-bootstrap/3.0.3/css/bootstrap.min.css">   
+	<head>
+		<style type="text/css">
+			body{
+				background: black;
+			}
+			#container{
+				width: 100%;
+				padding: 10px;
+				background: red;
+			}
+			#contentHeader{
+				background-color: transparent;
+				background-image: url("../../static_media/picture/bgpic.jpg");
+				background-repeat: repeat-x;
+				background-attachment: fixed;
+				background-clip: padding-box;
+				padding: 20px;
+				height: 140px;
+			}
+			#deviceColomn{
+				background: "#ffffff00";
+				padding: 10px;
+				height: 100%;
+			}
+			#canvasColomn{
+				background: green;
+				padding: 10px;
+				height: 100%;
+			}
+			#contentFooter{
+				background: blue;
+				padding-top: 20px;
+				width: 100%;
+				height: 140px;
+			}
+			#contentBody{
+			}
+			/*#hiddenCanvas{
+				position: absolute;
+				top: 0px;
+				left: 0px;
+				width: 100%;
+				height: 100%;
+				z-index: 10;
+			}*/
+			.navUL{
+				list-style-type: none;
+				padding-top: 5px;
+				padding-bottom: 5px;
+				padding-left: 10px;
+				padding-right: 10px;
+			}
+			.navUL li> ul{
+				visibility: hidden;
+				position: absolute;
+				list-style-type: none;
+				padding-left: 0px;
+				left: 0px;
+				opacity: 0;
+				-moz-transition: all .2s ease .1s;
+				-webkit-transition: all .2s ease .1s;
+				-o-transition: all .2s ease .1s;
+				transition: all .2s ease .1s;
+			}
+			.navUL ul li{
+				background-color: white;
+				border-bottom-width: 1px;
+				border-bottom-style: solid;
+				border-bottom-color: black;
+				padding: 3px 4px 4px 3px;
+				width: 200px;
+			}
+			a, a:hover{
+				color: gray;
+				text-decoration: none;
+			}
+			ul.navUL li:hover{
+				background-color: #3491F8;
+			}
+			ul.navUL li:hover a{
+				color: black;
+			}
+			.navUL> li{
+				position: relative;
+				float: left;
+				display: block;
+				padding-left: 15px;
+				padding-right: 15px;
+			}
+			.navUL> li.lastChild{
+				border-right-style: none;
+			}
+			.drop:hover> ul{
+				visibility: visible;
+				opacity: 1;
+			}
+		</style>
+	</head>
+	<body>
+		<div id= "container">
+			<div id= "contentHeader">
+				this is header.
+				<ul class= "navUL">
+					<li><a href="#"><b>Brand</b></a></li>
+					<li><a href="#">link</a></li>
+					<li><a href="#">link</a></li>
+					<li class= "drop lastChild">
+						<a href="#">Dropdown</a>
+						<ul>
+							<li><a href="#">Action</a></li>
+							<li><a href="#">Another Action</a></li>
+						</ul>
+					</li>
+				</ul>
+				<div style= "clear: both"></div>
+			</div>
+			<div id= "contentBody" class= "row">
+				<div id= "hiddenCanvas">
+				</div>
+				<div id= "deviceColomn" class= "col-lg-2">
+				</div>
+				<div id= "canvasColomn" class= "col-lg-10">
+				</div>
+				<!-- <div style= "clear: both"></div> -->
+			</div>
+			<div id= "contentFooter">
+				this is footer.
+			</div>
+		</div>
+	</body>
+	<script src="../../static_media/jquery/jquery-1.10.2.min.js"></script>
+	<script src="../../static_media/bootstrap/js/bootstrap.js"></script>
+	<script src= "http://www.jointjs.com/downloads/joint.js"></script>
+	<script src= "../../static_media/jquery/joint.shapes.devs.js"></script> 
+	<script type="text/javascript">
+		function calculateTotalHeight(element){
+			var height= element.height()+  convertPxToInt(element.css('margin-top'))+ convertPxToInt(element.css('margin-bottom'));
+			return height;
+		}
+		function convertPxToInt(px){
+			if(px== null){
+    			return null;
+    		}
+    		if(px.indexOf('px')== -1){
+    			return px;
+    		}
+    		var str= px.slice(0, px.length- 2);
+    		return parseInt(str);
+		}
+		$(document).ready(function(){
+			$('#contentBody').height($(window).height()- $('#contentHeader').height()- $('#contentFooter').height());
+			var devGraph= new joint.dia.Graph;
+			var canGraph= new joint.dia.Graph;
+			var devPaper= new joint.dia.Paper({
+				el: $('#deviceColomn'),
+				width: convertPxToInt($('#deviceColomn').css('width')),
+				height: convertPxToInt($('#deviceColomn').css('height')),
+				gridSize: 1,
+				model: devGraph,
+				snapLinks: true
+			});
+			var canPaper= new joint.dia.Paper({
+				el: $('#canvasColomn'),
+				width: convertPxToInt($('#canvasColomn').css('width')),
+				height: convertPxToInt($('#canvasColomn').css('height')),
+				gridSize: 1,
+				model: canGraph,
+				snapLinks: true
+			});
+			var routeElement= new joint.shapes.devs.Model({
+				id: 'routeGeneratorElement',
+				position: {x: 20, y: 0},
+			    size: {width: 50, height: 50},
+			    inPorts: [''],
+			    attrs: {
+			        rect: { fill: '#FFCC71' },
+			        '.label': {text: 'Route'},
+			        '.inPorts circle': {fill: '#16A085', 'ref-x': 0.3, 'ref-y': 0.2, magnet: 'passive'}
+			    }
+			});
+			var hostElement= new joint.shapes.devs.Model({
+				id: 'hostGeneratorElement',
+				position: {x: 110, y: 0},
+			    size: {width: 50, height: 50},
+			    inPorts: [''],
+			    attrs: {
+			        rect: {fill: '#FFCC71' },
+			        '.label': {text: 'Host'},
+			        '.inPorts circle': {fill: '#16A085', 'ref-x': 0.3, 'ref-y': 0.2, magnet: 'passive'}
+			    }
+			});
+			/*devPaper.on("blank:pointerup", function(callview, event, x, y){
+				window.console.log('canPaper on');
+			})*/
+			/*devPaper.on("cell:pointerup", function(callview, event, px, py){
+				switch(callview.model.id){
+					case "routeGeneratorElement":
+						routeElement.remove();
+						routeElement= new joint.shapes.devs.Model({
+							id: 'routeGeneratorElement',
+							position: {x: 20, y: 0},
+						    size: {width: 50, height: 50},
+						    inPorts: [''],
+						    attrs: {
+						        rect: { fill: '#FFCC71' },
+						        '.label': {text: 'Route'},
+						        '.inPorts circle': {fill: '#16A085', 'ref-x': 0.3, 'ref-y': 0.2, magnet: 'passive'}
+						    }
+						});
+						devGraph.addCell(routeElement);
+						break;
+					case "hostGeneratorElement":
+						hostElement.remove();
+						hostElement= new joint.shapes.devs.Model({
+							id: 'hostGeneratorElement',
+							position: {x: 110, y: 0},
+						    size: {width: 50, height: 50},
+						    inPorts: [''],
+						    attrs: {
+						        rect: {fill: '#FFCC71' },
+						        '.label': {text: 'Host'},
+						        '.inPorts circle': {fill: '#16A085', 'ref-x': 0.3, 'ref-y': 0.2, magnet: 'passive'}
+						    }
+						});
+						devGraph.addCell(hostElement);
+						break;
+					default:
+						return;
+						break;
+				}
+				window.console.log(py);
+				if(px> $('#deviceColomn').width()+ convertPxToInt($('#canvasColomn').css('padding-left'))){
+					var newElement= new joint.shapes.devs.Model({
+						id: 'tempElement',
+						position: {x: px, y: 50 },
+						inPorts: [''],
+						attrs: {
+							rect: {fill: '#FFCC71'},
+							'.label': {text: 'Host'},
+							'.inPorts circle': {fill: '#16A085', 'ref-x': 0.3, 'ref-y': 0.2}
+						}
+					});
+					canGraph.addCell(newElement);
+					window.console.log('aaa');
+				}
+			});
+			devGraph.addCells([routeElement, hostElement]);	*/
+			devGraph.addCells([routeElement, hostElement]);
+		});
+	</script>
+</html>

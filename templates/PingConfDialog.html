@@ -1,0 +1,50 @@
+<html>
+	<head>
+		<meta http-equiv= "content-type" content= "text/html; charset= gb2312"/>
+		<title>PING实验主机配置</title>
+	</head>
+	<script>
+		function clickListener(){
+			if((document.getElementById(1).value.length> 0)&&(document.getElementById(2).value.length> 0)&&
+				(document.getElementById(3).value.length> 0)&&(document.getElementById(4).value.length> 0)){
+				var textAr= document.getElementById(1).value.concat(".", document.getElementById(2).value, "."
+				, document.getElementById(3).value, ".", document.getElementById(4).value);	
+				window.returnValue= textAr;
+				window.close();	
+			}else{
+				alert("IP地址请完整输入！");
+			}
+		}
+		function keyListener(taName, maxLength){
+			var textAr= taName.value;
+			var charCode= taName.value.charAt(taName.value.length- 1);
+			if(charCode>= '0'){
+				if(charCode<= '9'){
+					if((textAr.length)> maxLength){
+						taName.value= taName.value.substring(0, maxLength);
+					}
+				}else{
+					taName.value= taName.value.substring(0, taName.value.length- 1);
+				}
+			}else{
+				taName.value= taName.value.substring(0, taName.value.length- 1);
+			}
+		}
+	</script>
+	<body background= "#00FFFF" >
+		<P><font size= "+1">请输入IP地址:  </font>
+			<textarea name= "hostIP1" id= "1" rows= "1" cols= "5" style= "OVERFLOW: hidden" onkeyup= "keyListener(this, 3)"></textarea>
+		   .
+			<textarea name= "hostIP2" id= "2" rows= "1" cols= "5" style= "OVERFLOW: hidden" onkeyup= "keyListener(this, 3)"></textarea>
+		   .
+			<textarea name= "hostIP3" id= "3" rows= "1" cols= "5" style= "OVERFLOW: hidden" onkeyup= "keyListener(this, 3)"></textarea>
+		   .
+			<textarea name= "hostIP4" id= "4" rows= "1" cols= "5" style= "OVERFLOW: hidden" onkeyup= "keyListener(this, 3)"></textarea>
+		</p>
+		<p align= "center">
+			<button type= "button" onclick= "clickListener()">
+				确认
+			</button>
+		</p>
+	</body>
+</html>

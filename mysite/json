@@ -1,0 +1,325 @@
+{
+   "ARRAY" : [
+      {
+         "DSTIP" : "10.4.4.2",
+         "EXTRAINFO" : "ICMP(PING) request|",
+         "LENGTH" : "1070",
+         "MICSEC" : "4205",
+         "NODE" : "0",
+         "PROTOCAL" : "ICMP",
+         "SEC" : "1",
+         "SRCIP" : "10.1.1.2"
+      },
+      {
+         "DSTIP" : "10.4.4.2",
+         "EXTRAINFO" : "ICMP(PING) request|",
+         "LENGTH" : "1070",
+         "MICSEC" : "7918",
+         "NODE" : "2",
+         "PROTOCAL" : "ICMP",
+         "SEC" : "1",
+         "SRCIP" : "10.1.1.2"
+      },
+      {
+         "DSTIP" : "10.4.4.2",
+         "EXTRAINFO" : "ICMP(PING) request|",
+         "LENGTH" : "1070",
+         "MICSEC" : "12124",
+         "NODE" : "2",
+         "PROTOCAL" : "ICMP",
+         "SEC" : "1",
+         "SRCIP" : "10.1.1.2"
+      },
+      {
+         "DSTIP" : "10.4.4.2",
+         "EXTRAINFO" : "ICMP(PING) request|",
+         "LENGTH" : "1070",
+         "MICSEC" : "15837",
+         "NODE" : "3",
+         "PROTOCAL" : "ICMP",
+         "SEC" : "1",
+         "SRCIP" : "10.1.1.2"
+      },
+      {
+         "DSTIP" : "10.4.4.2",
+         "EXTRAINFO" : "ICMP(PING) request|",
+         "LENGTH" : "1070",
+         "MICSEC" : "20043",
+         "NODE" : "3",
+         "PROTOCAL" : "ICMP",
+         "SEC" : "1",
+         "SRCIP" : "10.1.1.2"
+      },
+      {
+         "DSTIP" : "10.4.4.2",
+         "EXTRAINFO" : "ICMP(PING) request|",
+         "LENGTH" : "1070",
+         "MICSEC" : "23756",
+         "NODE" : "4",
+         "PROTOCAL" : "ICMP",
+         "SEC" : "1",
+         "SRCIP" : "10.1.1.2"
+      },
+      {
+         "DSTIP" : "10.4.4.2",
+         "EXTRAINFO" : "ICMP(PING) request|",
+         "LENGTH" : "1070",
+         "MICSEC" : "27962",
+         "NODE" : "4",
+         "PROTOCAL" : "ICMP",
+         "SEC" : "1",
+         "SRCIP" : "10.1.1.2"
+      },
+      {
+         "DSTIP" : "10.4.4.2",
+         "EXTRAINFO" : "ICMP(PING) request|",
+         "LENGTH" : "1070",
+         "MICSEC" : "31675",
+         "NODE" : "1",
+         "PROTOCAL" : "ICMP",
+         "SEC" : "1",
+         "SRCIP" : "10.1.1.2"
+      },
+      {
+         "DSTIP" : "10.1.1.2",
+         "EXTRAINFO" : "ICMP(PING) reply|",
+         "LENGTH" : "1070",
+         "MICSEC" : "35881",
+         "NODE" : "1",
+         "PROTOCAL" : "ICMP",
+         "SEC" : "1",
+         "SRCIP" : "10.4.4.2"
+      },
+      {
+         "DSTIP" : "10.1.1.2",
+         "EXTRAINFO" : "ICMP(PING) reply|",
+         "LENGTH" : "1070",
+         "MICSEC" : "39594",
+         "NODE" : "4",
+         "PROTOCAL" : "ICMP",
+         "SEC" : "1",
+         "SRCIP" : "10.4.4.2"
+      },
+      {
+         "DSTIP" : "10.1.1.2",
+         "EXTRAINFO" : "ICMP(PING) reply|",
+         "LENGTH" : "1070",
+         "MICSEC" : "43800",
+         "NODE" : "4",
+         "PROTOCAL" : "ICMP",
+         "SEC" : "1",
+         "SRCIP" : "10.4.4.2"
+      },
+      {
+         "DSTIP" : "10.1.1.2",
+         "EXTRAINFO" : "ICMP(PING) reply|",
+         "LENGTH" : "1070",
+         "MICSEC" : "47513",
+         "NODE" : "3",
+         "PROTOCAL" : "ICMP",
+         "SEC" : "1",
+         "SRCIP" : "10.4.4.2"
+      },
+      {
+         "DSTIP" : "10.1.1.2",
+         "EXTRAINFO" : "ICMP(PING) reply|",
+         "LENGTH" : "1070",
+         "MICSEC" : "51719",
+         "NODE" : "3",
+         "PROTOCAL" : "ICMP",
+         "SEC" : "1",
+         "SRCIP" : "10.4.4.2"
+      },
+      {
+         "DSTIP" : "10.1.1.2",
+         "EXTRAINFO" : "ICMP(PING) reply|",
+         "LENGTH" : "1070",
+         "MICSEC" : "55432",
+         "NODE" : "2",
+         "PROTOCAL" : "ICMP",
+         "SEC" : "1",
+         "SRCIP" : "10.4.4.2"
+      },
+      {
+         "DSTIP" : "10.1.1.2",
+         "EXTRAINFO" : "ICMP(PING) reply|",
+         "LENGTH" : "1070",
+         "MICSEC" : "59638",
+         "NODE" : "2",
+         "PROTOCAL" : "ICMP",
+         "SEC" : "1",
+         "SRCIP" : "10.4.4.2"
+      },
+      {
+         "DSTIP" : "10.1.1.2",
+         "EXTRAINFO" : "ICMP(PING) reply|",
+         "LENGTH" : "1070",
+         "MICSEC" : "63351",
+         "NODE" : "0",
+         "PROTOCAL" : "ICMP",
+         "SEC" : "1",
+         "SRCIP" : "10.4.4.2"
+      },
+      {
+         "DSTIP" : "10.4.4.2",
+         "EXTRAINFO" : "ICMP(PING) request|",
+         "LENGTH" : "1070",
+         "MICSEC" : "0",
+         "NODE" : "0",
+         "PROTOCAL" : "ICMP",
+         "SEC" : "2",
+         "SRCIP" : "10.1.1.2"
+      },
+      {
+         "DSTIP" : "10.4.4.2",
+         "EXTRAINFO" : "ICMP(PING) request|",
+         "LENGTH" : "1070",
+         "MICSEC" : "3711",
+         "NODE" : "2",
+         "PROTOCAL" : "ICMP",
+         "SEC" : "2",
+         "SRCIP" : "10.1.1.2"
+      },
+      {
+         "DSTIP" : "10.4.4.2",
+         "EXTRAINFO" : "ICMP(PING) request|",
+         "LENGTH" : "1070",
+         "MICSEC" : "3711",
+         "NODE" : "2",
+         "PROTOCAL" : "ICMP",
+         "SEC" : "2",
+         "SRCIP" : "10.1.1.2"
+      },
+      {
+         "DSTIP" : "10.4.4.2",
+         "EXTRAINFO" : "ICMP(PING) request|",
+         "LENGTH" : "1070",
+         "MICSEC" : "7423",
+         "NODE" : "3",
+         "PROTOCAL" : "ICMP",
+         "SEC" : "2",
+         "SRCIP" : "10.1.1.2"
+      },
+      {
+         "DSTIP" : "10.4.4.2",
+         "EXTRAINFO" : "ICMP(PING) request|",
+         "LENGTH" : "1070",
+         "MICSEC" : "7423",
+         "NODE" : "3",
+         "PROTOCAL" : "ICMP",
+         "SEC" : "2",
+         "SRCIP" : "10.1.1.2"
+      },
+      {
+         "DSTIP" : "10.4.4.2",
+         "EXTRAINFO" : "ICMP(PING) request|",
+         "LENGTH" : "1070",
+         "MICSEC" : "11135",
+         "NODE" : "4",
+         "PROTOCAL" : "ICMP",
+         "SEC" : "2",
+         "SRCIP" : "10.1.1.2"
+      },
+      {
+         "DSTIP" : "10.4.4.2",
+         "EXTRAINFO" : "ICMP(PING) request|",
+         "LENGTH" : "1070",
+         "MICSEC" : "11135",
+         "NODE" : "4",
+         "PROTOCAL" : "ICMP",
+         "SEC" : "2",
+         "SRCIP" : "10.1.1.2"
+      },
+      {
+         "DSTIP" : "10.4.4.2",
+         "EXTRAINFO" : "ICMP(PING) request|",
+         "LENGTH" : "1070",
+         "MICSEC" : "14847",
+         "NODE" : "1",
+         "PROTOCAL" : "ICMP",
+         "SEC" : "2",
+         "SRCIP" : "10.1.1.2"
+      },
+      {
+         "DSTIP" : "10.1.1.2",
+         "EXTRAINFO" : "ICMP(PING) reply|",
+         "LENGTH" : "1070",
+         "MICSEC" : "14847",
+         "NODE" : "1",
+         "PROTOCAL" : "ICMP",
+         "SEC" : "2",
+         "SRCIP" : "10.4.4.2"
+      },
+      {
+         "DSTIP" : "10.1.1.2",
+         "EXTRAINFO" : "ICMP(PING) reply|",
+         "LENGTH" : "1070",
+         "MICSEC" : "18560",
+         "NODE" : "4",
+         "PROTOCAL" : "ICMP",
+         "SEC" : "2",
+         "SRCIP" : "10.4.4.2"
+      },
+      {
+         "DSTIP" : "10.1.1.2",
+         "EXTRAINFO" : "ICMP(PING) reply|",
+         "LENGTH" : "1070",
+         "MICSEC" : "18560",
+         "NODE" : "4",
+         "PROTOCAL" : "ICMP",
+         "SEC" : "2",
+         "SRCIP" : "10.4.4.2"
+      },
+      {
+         "DSTIP" : "10.1.1.2",
+         "EXTRAINFO" : "ICMP(PING) reply|",
+         "LENGTH" : "1070",
+         "MICSEC" : "22272",
+         "NODE" : "3",
+         "PROTOCAL" : "ICMP",
+         "SEC" : "2",
+         "SRCIP" : "10.4.4.2"
+      },
+      {
+         "DSTIP" : "10.1.1.2",
+         "EXTRAINFO" : "ICMP(PING) reply|",
+         "LENGTH" : "1070",
+         "MICSEC" : "22272",
+         "NODE" : "3",
+         "PROTOCAL" : "ICMP",
+         "SEC" : "2",
+         "SRCIP" : "10.4.4.2"
+      },
+      {
+         "DSTIP" : "10.1.1.2",
+         "EXTRAINFO" : "ICMP(PING) reply|",
+         "LENGTH" : "1070",
+         "MICSEC" : "25984",
+         "NODE" : "2",
+         "PROTOCAL" : "ICMP",
+         "SEC" : "2",
+         "SRCIP" : "10.4.4.2"
+      },
+      {
+         "DSTIP" : "10.1.1.2",
+         "EXTRAINFO" : "ICMP(PING) reply|",
+         "LENGTH" : "1070",
+         "MICSEC" : "25984",
+         "NODE" : "2",
+         "PROTOCAL" : "ICMP",
+         "SEC" : "2",
+         "SRCIP" : "10.4.4.2"
+      },
+      {
+         "DSTIP" : "10.1.1.2",
+         "EXTRAINFO" : "ICMP(PING) reply|",
+         "LENGTH" : "1070",
+         "MICSEC" : "29696",
+         "NODE" : "0",
+         "PROTOCAL" : "ICMP",
+         "SEC" : "2",
+         "SRCIP" : "10.4.4.2"
+      }
+   ],
+   "ROOT" : "JSON"
+}

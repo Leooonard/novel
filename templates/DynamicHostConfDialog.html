@@ -1,0 +1,200 @@
+<html>
+	<head>
+		<meta http-equiv= "content-type" content= "text/html; charset= gb2312"/>
+		<title>动态路由配置实验</title>
+	</head>
+	<script>
+		var segArray;
+		var ys= null;
+		function Init(){
+			segArray= window.dialogArguments.getSegIDArray();
+			var ipArray= window.dialogArguments.getIPArray();
+			var maskIPArray= window.dialogArguments.getMaskIPArray();
+			var table= document.getElementById("ipTable");
+			for(var i= 0; i< ipArray.length; i++){
+				var row= table.rows[i+ 1];
+				var cell= row.cells[0];
+				var ipAddr= ipArray[i].concat(".");
+				var si= 0;
+				var li= 0;
+				for(var j= 0; j< 4; j++){
+					while(ipAddr[li]!= '.'){
+						li++;
+					}
+					var str= ipAddr.substring(si, li);
+					var child= cell.children[j];
+					child.value= str; 
+					li++;
+					si= li;
+				}
+			}
+			table= document.getElementById("maskIPTable");
+			for(var i= 0; i< maskIPArray.length; i++){
+				var row= table.rows[i+ 1];
+				var cell= row.cells[0];
+				var ipAddr= maskIPArray[i].concat(".");
+				var si= 0;
+				var li= 0;
+				for(var j= 0; j< 4; j++){
+					while(ipAddr[li]!= '.'){
+						li++;
+					}
+					var str= ipAddr.substring(si, li);
+					var child= cell.children[j];
+					child.value= str; 
+					li++;
+					si= li;
+				}
+			}
+			if(window.dialogArguments.getHostDev()){
+				document.getElementsByName("choiceRadio")[2].checked= false;
+				document.getElementsByName("choiceRadio")[0].checked= true;
+			}
+			if(window.dialogArguments.getTargetDev()){
+				document.getElementsByName("choiceRadio")[2].checked= false;
+				document.getElementsByName("choiceRadio")[1].checked= true;
+			}
+		}
+        	function show(obj){
+                	ys=obj.bgColor;
+                	obj.bgColor="red";
+                }
+                function noshow(obj){
+                        obj.bgColor=ys;
+                }
+		function keyListener(taName, maxLength){
+			var textAr= taName.value;
+			var charCode= taName.value.charAt(taName.value.length- 1);
+			if(charCode>= '0'){
+				if(charCode<= '9'){
+					if((textAr.length)> maxLength){
+						taName.value= taName.value.substring(0, maxLength);
+					}
+				}else{
+					taName.value= taName.value.substring(0, taName.value.length- 1);
+				}
+			}else{
+				taName.value= taName.value.substring(0, taName.value.length- 1);
+			}
+		}
+		function clickListener(){
+			var ipTable= document.getElementById("ipTable");
+			var maskIPTable= document.getElementById("maskIPTable");
+			var ipArray= new Array();
+			var maskIPArray= new Array();
+			for(var i= 1; i< ipTable.rows.length; i++){
+				var row= ipTable.rows[i];
+				var cell= row.cells[0];
+				var str= "";
+				for(var j= 0; j< cell.children.length; j++){
+					if(cell.children[j].value.length<= 0){
+						alert("请完整填写IP地址!");
+						return false;
+					}else{
+						str= str.concat(cell.children[j].value);
+						if(j!= cell.children.length- 1){
+							str= str.concat(".");
+						}
+					}
+				}
+				ipArray.push(str);
+			}
+			window.dialogArguments.setIPArray(ipArray);
+			for(var i= 1; i< maskIPTable.rows.length; i++){
+				var row= maskIPTable.rows[i];
+				var cell= row.cells[0];
+				var str= "";
+				for(var j= 0; j< cell.children.length; j++){
+					if(cell.children[j].value.length<= 0){
+						alert("请完整填写网关IP地址!");
+						return false;
+					}else{
+						str= str.concat(cell.children[j].value);
+						if(j!= cell.children.length- 1){
+							str= str.concat(".");
+						}
+					}
+				}
+				maskIPArray.push(str);
+			}
+			window.dialogArguments.setMaskIPArray(maskIPArray);
+			if(document.getElementsByName("choiceRadio")[0].checked){
+				if(window.dialogArguments.getCanHost()){
+					window.dialogArguments.setHostDev(true);
+					window.dialogArguments.setTargetDev(false);
+				}else{
+					alert("该设备不可被设置为源设备， 实验中只能存在一台源设备！");
+					return false;
+				}
+			}else if(document.getElementsByName("choiceRadio")[1].checked){
+				if(window.dialogArguments.getCanTarget()){
+					window.dialogArguments.setHostDev(false);
+					window.dialogArguments.setTargetDev(true);
+				}else{
+					alert("该主机不可被设置为目标设备， 实验中只能存在一台目标设备！");
+					return false;
+				}
+			}else if(document.getElementsByName("choiceRadio")[2].checked){
+				window.dialogArguments.setHostDev(false);
+				window.dialogArguments.setTargetDev(false);
+			}
+			window.returnValue= window.dialogArguments;
+			window.close();
+		}
+	</script>
+	<body onload= "Init()">
+		<p align= "center"> <font size= "+9">主机配置</font> </p>
+			<hr width= "700" size= "2" color= "#CC6600">
+			<p align= "center">
+				<table id= "ipTable" marginTop= "200px" border= "0" width= "600" align= "center">
+					<tr onmouseover= "show(this)" onmouseout= "noshow(this)" bgcolor= "#cccccc">
+						<td> IP地址 </td>
+					</tr>
+					<tr>
+						<td>
+							<textarea rows= "1" cols= "5" style= "OVERFLOW: hidden" onkeyup= "keyListener(this, 3)"></textarea>
+		   .
+							<textarea rows= "1" cols= "5" style= "OVERFLOW: hidden" onkeyup= "keyListener(this, 3)"></textarea>
+		   .
+							<textarea rows= "1" cols= "5" style= "OVERFLOW: hidden" onkeyup= "keyListener(this, 3)"></textarea>
+		   .
+							<textarea rows= "1" cols= "5" style= "OVERFLOW: hidden" onkeyup= "keyListener(this, 3)"></textarea>
+						</td>
+					</tr>
+				</table>
+			</p>
+			<hr width= "700" size= "2" color= "#CC6600">
+			<p align= "center">
+				<table id= "maskIPTable" marginTop= "200px" border= "0" width= "600" align= "center">
+					<tr onmouseover= "show(this)" onmouseout= "noshow(this)" bgcolor= "#cccccc">
+						<td> 子网掩码 </td>
+					</tr>
+					<tr>
+						<td>
+							<textarea rows= "1" cols= "5" style= "OVERFLOW: hidden" onkeyup= "keyListener(this, 3)"></textarea>
+		   .
+							<textarea rows= "1" cols= "5" style= "OVERFLOW: hidden" onkeyup= "keyListener(this, 3)"></textarea>
+		   .
+							<textarea rows= "1" cols= "5" style= "OVERFLOW: hidden" onkeyup= "keyListener(this, 3)"></textarea>
+		   .
+							<textarea rows= "1" cols= "5" style= "OVERFLOW: hidden" onkeyup= "keyListener(this, 3)"></textarea>
+						</td>
+					</tr>
+				</table>
+			</p>
+			<p align= "center">
+				<input type= "radio" id= "hostRadio" name= "choiceRadio">源设备
+				<input type= "radio" id= "targetRadio" name= "choiceRadio">目标设备
+				<input type= "radio" id= "normalRadio" name= "choiceRadio" checked>普通设备
+			</p>
+			<hr width= "700" size= "2" color= "#CC6600">
+			<p align= "center">
+				<button type= "button" onclick= "clickListener()">	
+					确认
+				</button>	
+			</p>
+		</form>	
+	</body>
+</html>
+
+
