@@ -308,8 +308,9 @@ def AjaxDynamicRouteExp(request):
 	import traceback
 	try:
 		data= request.GET.get('data')
-		JSONStr= DynamicRouteExpModule.DynamicRouteExp(data)
-		Log.ErrorLog(AjaxDynamicRouteExp.__name__, JSONStr)
+		id= request.session['stuinfo'].get('id')
+		folderPath= DynamicRouteExpModule.CreateUserFolder(id)
+		JSONStr= DynamicRouteExpModule.DynamicRouteExp(data, folderPath)
 		return HttpResponse(JSONStr)
 	except:
 		msg= Log.GetErrorMessage(traceback)
