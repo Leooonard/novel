@@ -61,7 +61,6 @@ def CreateUserFolder(acc, everytime= False):
 		os.mkdir(folderPath)
 		os.chmod(folderPath, stat.S_IRWXU) #修改权限
 		os.chmod(folderPath, stat.S_IRWXG)
-		os.chmod(folderPath, stat.S_IRWXO)
 		return folderPath
 
 def ConvertJSONtoXML(JSONObj, path):
