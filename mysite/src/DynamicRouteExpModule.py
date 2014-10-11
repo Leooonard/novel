@@ -13,7 +13,7 @@ import os, ctypes, MySQLdb
 import string
 from .. import utils
 import Log
-import time, os, re, random, shutil
+import time, os, re, random, shutil, stat
 
 
 def DynamicRouteExp(data, path):
@@ -59,6 +59,9 @@ def CreateUserFolder(acc, everytime= False):
 		return folderPath
 	else:
 		os.mkdir(folderPath)
+		os.chmod(folderPath, stat.S_IRWXU) #修改权限
+		os.chmod(folderPath, stat.S_IRWXG)
+		os.chmod(folderPath, stat.S_IRWXO)
 		return folderPath
 
 def ConvertJSONtoXML(JSONObj, path):
