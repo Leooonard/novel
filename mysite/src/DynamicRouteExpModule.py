@@ -21,10 +21,9 @@ def DynamicRouteExp(data, path):
 	xmlPath= ConvertJSONtoXML(JSONObj, path)
 	#修改了！！！！
 	libPath= utils.GetFileRealPath(__file__, '../lab-ping.so')
-	Log.Log('DynamicRouteExp', 'json string is '+ data)
-	Log.Log('DynamicRouteExp', 'xmlPath is '+ xmlPath)
 	libping= cdll.LoadLibrary(libPath)
 	rtVal= libping.ping(xmlPath)
+	Log.Log('DynamicRouteExp', 'rtval is '+ ctypes.string_at(rtVal))
 	libPath= utils.GetFileRealPath(__file__, '../read.so')
 	libping= cdll.LoadLibrary(libPath)
 	rtVal= libping.checkPCAP(ctypes.string_at(rtVal))
