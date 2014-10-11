@@ -53,7 +53,7 @@ def CreateUserFolder(acc, everytime= False):
 		folderName= acc
 	folderPath= utils.GetFileRealPath(__file__, '../ExpResult/'+ folderName)
 	if not everytime and os.path.isdir(folderPath):
-		os.remove(folderPath)
+		os.rmdir(folderPath)
 	if os.path.isdir(folderPath):
 		return folderPath
 	else:
