@@ -41,7 +41,8 @@ def CreateUserFolder(acc, everytime= False):
 	"""
 		帮每个用户创建一个属于自己的文件夹.
 		everytime为True则每次都创建一个全新的文件夹. 文件夹名为time.time()+ acc+ 8位随机数
-		everytime为False则只创建一次文件夹. 文件夹名为acc
+		everytime为False则只创建一次文件夹. 文件夹名为acc. 并且若已经存在, 将删除之前的文件夹,
+		重新建立新同名文件夹.
 
 		若文件夹已存在, 直接返回路径. 否则创建文件夹后返回路径.
 	"""
@@ -51,6 +52,8 @@ def CreateUserFolder(acc, everytime= False):
 	else:
 		folderName= acc
 	folderPath= utils.GetFileRealPath(__file__, '../ExpResult/'+ folderName)
+	if not everytime and os.path.isdir(folderPath):
+		os.remove(folderPath)
 	if os.path.isdir(folderPath):
 		return folderPath
 	else:
