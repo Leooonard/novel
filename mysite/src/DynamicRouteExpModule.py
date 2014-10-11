@@ -23,7 +23,7 @@ def DynamicRouteExp(data, path):
 	libPath= utils.GetFileRealPath(__file__, '../lab-ping.so')
 	libping= cdll.LoadLibrary(libPath)
 	Log.Log('DynamicRouteExp', 'xmlPath is '+ xmlPath)
-	rtVal= libping.ping("xmlPath")
+	rtVal= libping.ping(str(xmlPath))
 	Log.Log('DynamicRouteExp', 'rtval is '+ ctypes.string_at(rtVal))
 	libPath= utils.GetFileRealPath(__file__, '../read.so')
 	libping= cdll.LoadLibrary(libPath)
