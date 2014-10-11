@@ -13,7 +13,7 @@ import os, ctypes, MySQLdb
 import string
 from .. import utils
 import Log
-import time, os, re, random
+import time, os, re, random, shutil
 
 
 def DynamicRouteExp(data, path):
@@ -53,7 +53,7 @@ def CreateUserFolder(acc, everytime= False):
 		folderName= acc
 	folderPath= utils.GetFileRealPath(__file__, '../ExpResult/'+ folderName)
 	if not everytime and os.path.isdir(folderPath):
-		os.rmdir(folderPath)
+		shutil.rmtree(folderPath, True)
 	if os.path.isdir(folderPath):
 		return folderPath
 	else:
