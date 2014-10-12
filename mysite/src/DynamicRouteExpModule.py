@@ -31,6 +31,7 @@ def DynamicRouteExp(data, path):
 	rtVal= string_at(rtVal)
 	try:
 		rtVal= int(rtVal) #尝试将字符串转型成数字.
+		Log.Log("DynamicRouteExp", "rtVal is "+ str(rtVal))
 	except:
 		#转型失败说明实验产生结果. 可以进行数据包分析.
 		pass
