@@ -16,8 +16,9 @@ import Log
 import time, os, re, random, shutil, stat
 
 ERROR_ARRAY= ['XML文件读取错误.', 'XML文件错误, 缺少root元素.', 'XML文件错误, 缺少root元素.', 
-				'XML文件错误, 缺少实验类型.', 'XML文件错误, 缺少节点数量.', '节点数量超过范围.', 
-				'XML文件错误, 缺少网段数量.', 'XML文件错误, 网段数量错误.', '']
+				'XML文件错误, 缺少实验类型.', 'XML文件错误, 缺少节点数量.', 
+				'节点数量超过范围, (节点数量应在0-100之间)', 'XML文件错误, 缺少网段数量.',
+				'XML文件错误, 网段数量错误.']
 
 def DynamicRouteExp(data, path):
 	Log.Log('DynamicRouteExp', 'data is '+ data)
