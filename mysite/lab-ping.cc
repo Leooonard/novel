@@ -245,7 +245,7 @@ const char* ping(char* name) {
 	string remoteipaddress = "null";
 	string remotemask;
 	curNode = curNode->next;
-	
+
 
 //--------------------------鑾峰彇鏈湴涓绘満鍜岃繙绋嬩富鏈虹殑ID鍙?-------------------------------
 	if ((!xmlStrcmp(curNode->name, (const xmlChar *) "local"))) //鏈湴涓绘満
@@ -929,6 +929,8 @@ const char* ping(char* name) {
                 randStr= randStr+ '|'+ count;
         }
         randStr= randStr+ '|';
+    return "1";
+
 //NS_LOG_INFO ("Run Simulation.");
 	//cout << "妯℃嫙瀹為獙寮€濮嬭繍琛岋細" << endl;
 	Simulator::Run();
