@@ -927,7 +927,7 @@ const char* ping(char* name) {
                 randStr= randStr+ '|'+ count;
         }
         randStr= randStr+ '|';
-
+    return "5";
 //NS_LOG_INFO ("Run Simulation.");
 	//cout << "妯℃嫙瀹為獙寮€濮嬭繍琛岋細" << endl;
 	Simulator::Run();
