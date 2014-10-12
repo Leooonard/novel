@@ -245,6 +245,8 @@ const char* ping(char* name) {
 	string remoteipaddress = "null";
 	string remotemask;
 	curNode = curNode->next;
+	
+    return "5";
 
 //--------------------------鑾峰彇鏈湴涓绘満鍜岃繙绋嬩富鏈虹殑ID鍙?-------------------------------
 	if ((!xmlStrcmp(curNode->name, (const xmlChar *) "local"))) //鏈湴涓绘満
@@ -303,7 +305,7 @@ const char* ping(char* name) {
 	curNode = curNode->next;
 	segNode = curNode;
  
-    return "5";
+
 
 //---------------------寮€濮嬭繘鍏ョ綉娈靛惊鐜? 涓虹綉娈典袱绔殑璁惧杩涜閰嶇疆-------------------------        
 	while (segNode != NULL
