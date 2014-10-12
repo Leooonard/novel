@@ -303,6 +303,7 @@ const char* ping(char* name) {
 	curNode = curNode->next;
 	segNode = curNode;
  
+    return "5";
 
 //---------------------寮€濮嬭繘鍏ョ綉娈靛惊鐜? 涓虹綉娈典袱绔殑璁惧杩涜閰嶇疆-------------------------        
 	while (segNode != NULL
@@ -864,7 +865,6 @@ const char* ping(char* name) {
 	}
 
 	xmlFreeDoc(doc);
-    return "5";
 
 //鎸夌収瀹為獙绫诲瀷鍒涘缓搴旂敤
 	if (localipaddress != "null" && remoteipaddress != "null") {
