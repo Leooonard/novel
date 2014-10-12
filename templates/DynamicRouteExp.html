@@ -1418,8 +1418,8 @@
 					$word.text("执行中...");
 					$.get("/novel/ajaxdynamicrouteexp/?data="+ JSON.stringify(JSONObj)+ "&id="+ ExpID.toString(), function(data){
 						$word.css('display', 'none');
-						if(data== 'failed'){
-							alert("执行错误!");
+						if(data.substr(0, 'failed'.length)== 'failed'){
+							alert(data);
 							$loading.css("display", "none");
 						}else{
 							var $resultpaper= $(".resultpaper");

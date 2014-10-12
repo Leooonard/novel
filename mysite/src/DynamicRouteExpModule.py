@@ -15,6 +15,9 @@ from .. import utils
 import Log
 import time, os, re, random, shutil, stat
 
+ERROR_ARRAY= ['XML文件读取错误.', 'XML文件错误, 缺少root元素.', 'XML文件错误, 缺少root元素.', 
+				'XML文件错误, 缺少实验类型.', 'XML文件错误, 缺少节点数量.', '节点数量超过范围.', 
+				'XML文件错误, 缺少网段数量.', 'XML文件错误, 网段数量错误.', '']
 
 def DynamicRouteExp(data, path):
 	JSONObj= simplejson.loads(data)
@@ -22,9 +25,17 @@ def DynamicRouteExp(data, path):
 	#修改了！！！！
 	libPath= utils.GetFileRealPath(__file__, '../lab-ping.so')
 	libping= cdll.LoadLibrary(libPath)
-	Log.Log('DynamicRouteExp', 'xmlPath is '+ xmlPath)
-	rtVal= libping.ping(str(xmlPath))
+	rtVal= libping.ping(str(xmlPath)) #str()很关键！！！
 	Log.Log('DynamicRouteExp', 'rtval is '+ ctypes.string_at(rtVal))
+	rtVal= string_at(rtVal)
+	try:
+		rtVal= int(rtVal) #尝试将字符串转型成数字.
+	except:
+		#转型失败说明实验产生结果. 可以进行数据包分析.
+		pass
+	else:
+		#转型成功, 说明实验并未产生结果, 异常退出, 需要返回错误.
+		return 'failed, '+ ERROR_ARRAY[rtVal]
 	libPath= utils.GetFileRealPath(__file__, '../read.so')
 	libping= cdll.LoadLibrary(libPath)
 	rtVal= libping.checkPCAP(ctypes.string_at(rtVal))
