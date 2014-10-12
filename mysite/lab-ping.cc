@@ -246,7 +246,6 @@ const char* ping(char* name) {
 	string remotemask;
 	curNode = curNode->next;
 	
-    return "5";
 
 //--------------------------鑾峰彇鏈湴涓绘満鍜岃繙绋嬩富鏈虹殑ID鍙?-------------------------------
 	if ((!xmlStrcmp(curNode->name, (const xmlChar *) "local"))) //鏈湴涓绘満
