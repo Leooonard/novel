@@ -188,7 +188,7 @@ const char* ping(char* name) {
 		return "4";
 	}
 	if (nodecount <= 0 || nodecount > 100) {   //鍙兘鍦?鍒?00涓妭鐐硅鍋氬疄楠?
-		return "5";
+		return (char*)szKey;
 	}
 	//璇诲彇缃戞涓暟
 	curNode = curNode->next;
