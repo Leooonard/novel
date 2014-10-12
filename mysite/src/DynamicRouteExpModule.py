@@ -20,13 +20,13 @@ ERROR_ARRAY= ['XML文件读取错误.', 'XML文件错误, 缺少root元素.', 'X
 				'XML文件错误, 缺少网段数量.', 'XML文件错误, 网段数量错误.', '']
 
 def DynamicRouteExp(data, path):
+	Log.Log('DynamicRouteExp', 'data is '+ data)
 	JSONObj= simplejson.loads(data)
 	xmlPath= ConvertJSONtoXML(JSONObj, path)
 	#修改了！！！！
 	libPath= utils.GetFileRealPath(__file__, '../lab-ping.so')
 	libping= cdll.LoadLibrary(libPath)
 	rtVal= libping.ping(str(xmlPath)) #str()很关键！！！
-	Log.Log('DynamicRouteExp', 'rtval is '+ ctypes.string_at(rtVal))
 	rtVal= string_at(rtVal)
 	try:
 		rtVal= int(rtVal) #尝试将字符串转型成数字.
