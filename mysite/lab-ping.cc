@@ -864,6 +864,7 @@ const char* ping(char* name) {
 	}
 
 	xmlFreeDoc(doc);
+    return "5";
 
 //鎸夌収瀹為獙绫诲瀷鍒涘缓搴旂敤
 	if (localipaddress != "null" && remoteipaddress != "null") {
@@ -927,7 +928,6 @@ const char* ping(char* name) {
                 randStr= randStr+ '|'+ count;
         }
         randStr= randStr+ '|';
-    return "5";
 //NS_LOG_INFO ("Run Simulation.");
 	//cout << "妯℃嫙瀹為獙寮€濮嬭繍琛岋細" << endl;
 	Simulator::Run();
