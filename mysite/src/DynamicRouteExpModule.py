@@ -52,9 +52,11 @@ def DynamicRouteExp(data, path):
 			seg["NODE"]= 'r'+ str(string.atoi(seg["NODE"]))	
 		else:
 			seg["NODE"]= 'h'+ seg["NODE"]
-			
+
 	zipPath= CreatePCAPZip(path)
-	JSONObj['DOWNLOADPATH']= '/download/'+ zipPath if zipPath else '#' #如果返回false， 则赋值#.
+	id= request.session['stuinfo'].get('id')
+	#这里的路径有些复杂化. 可进行修改.
+	JSONObj['DOWNLOADPATH']= '/download/'+ id+ '/'+ zipPath if zipPath else '#' #如果返回false， 则赋值#. 
 
 	JSONStr= simplejson.dumps(JSONObj)	
 	return JSONStr
