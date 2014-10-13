@@ -122,7 +122,7 @@ def CreatePCAPZip(path):
 	zipPath= os.path.join(path, prefix+ '.zip')
 	zipTool= zipfile.ZipFile(zipPath, 'w', zipfile.ZIP_STORED)
 	for filename in filelist:
-		zipTool.write(os.path.join(path, filename))
+		zipTool.write(os.path.join(path, filename), filename)
 	zipTool.close()
 	return prefix+ '.zip'
 
