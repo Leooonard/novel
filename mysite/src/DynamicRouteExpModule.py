@@ -54,7 +54,7 @@ def DynamicRouteExp(data, path):
 			seg["NODE"]= 'h'+ seg["NODE"]
 
 	JSONObj['DOWNLOADPATH']= CreatePCAPZip(path) or '#' #如果返回false， 则赋值#.
-	
+
 	JSONStr= simplejson.dumps(JSONObj)	
 	return JSONStr
 
@@ -115,7 +115,7 @@ def CreatePCAPZip(path):
 	prefix= prefix.group()[0: -1]
 
 	#获取前缀后开始创建压缩文件
-	zipTool= zipfile.ZipFile(prefix+ '.zip', 'w', zipfile.ZIP_STORE)
+	zipTool= zipfile.ZipFile(prefix+ '.zip', 'w', zipfile.ZIP_STORED)
 	for filename in filelist:
 		zipTool.write(os.path.join(path, filename))
 	zipTool.close()
