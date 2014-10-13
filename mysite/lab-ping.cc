@@ -137,20 +137,20 @@ const char* ping(char* name) {
 	//cout.open(logname.c_str(), ios::out);
 
 	xmlDocPtr doc;
-	xmlNodePtr segNode; //缃戞
-	xmlNodePtr eleNode1; //鑺傜偣1
-	xmlNodePtr eleNode2; //鑺傜偣2
-	xmlNodePtr curNode; //褰撳墠鑺傜偣
+	xmlNodePtr segNode; //缂冩垶顔?
+	xmlNodePtr eleNode1; //閼哄倻鍋?
+	xmlNodePtr eleNode2; //閼哄倻鍋?
+	xmlNodePtr curNode; //瑜版挸澧犻懞鍌滃仯
 
 	xmlChar *szKey;
 	const char *szDocName = filename.c_str();
 	//cout<<filename<<endl;
-	//cout << "寮€濮嬭鍙朮ML淇℃伅" << endl;
+	//cout << "瀵偓婵顕伴崣鏈甅L娣団剝浼? << endl;
 	xmlSubstituteEntitiesDefault(1);
 	xmlLoadExtDtdDefaultValue=1;
 	doc = xmlReadFile(szDocName, "gb2312", XML_PARSE_NOBLANKS);
 	if (NULL == doc) {
-		return "0"; //空的xml文档.
+		return "0"; //绌虹殑xml鏂囨。.
 	}
 	curNode = xmlDocGetRootElement(doc);
 
@@ -158,67 +158,67 @@ const char* ping(char* name) {
 		xmlFreeDoc(doc);
 		return "1";
 	}
-	if (xmlStrcmp(curNode->name, BAD_CAST "root")) //鏍圭粨鐐?
+	if (xmlStrcmp(curNode->name, BAD_CAST "root")) //閺嶅湱绮ㄩ悙?
 	{
 		xmlFreeDoc(doc);
 		return "2";
 	}
-	//璇诲彇瀹為獙绫诲瀷
+	//鐠囪褰囩€圭偤鐛欑猾璇茬€?
 	curNode = curNode->xmlChildrenNode; //
 	string experitype;
-	if ((!xmlStrcmp(curNode->name, (const xmlChar *) "experitype"))) //瀹為獙绫诲瀷
+	if ((!xmlStrcmp(curNode->name, (const xmlChar *) "experitype"))) //鐎圭偤鐛欑猾璇茬€?
 	{	
 		szKey = xmlNodeGetContent(curNode);
 		experitype.append((char*) szKey);
-		//cout << "瀹為獙绫诲瀷涓猴細" << experitype << endl<<endl;
+		//cout << "鐎圭偤鐛欑猾璇茬€锋稉鐚寸窗" << experitype << endl<<endl;
 		xmlFree(szKey);
 	} else {
 		return "3";
 	}
-	//璇诲彇缁撶偣涓暟
+	//鐠囪褰囩紒鎾跺仯娑擃亝鏆?
 	curNode = curNode->next;
 	int nodecount;
-	if ((!xmlStrcmp(curNode->name, (const xmlChar *) "nodecount"))) //瀹為獙鑺傜偣涓暟
+	if ((!xmlStrcmp(curNode->name, (const xmlChar *) "nodecount"))) //鐎圭偤鐛欓懞鍌滃仯娑擃亝鏆?
 	{
 		szKey = xmlNodeGetContent(curNode);
 		nodecount = atoi((char*) szKey);
-		//cout << "鑺傜偣涓暟涓猴細" << nodecount << endl<<endl;
+		//cout << "閼哄倻鍋ｆ稉顏呮殶娑撶尨绱? << nodecount << endl<<endl;
 		xmlFree(szKey);
 	} else {
 		return "4";
 	}
-	if (nodecount <= 0 || nodecount > 100) {   //鍙兘鍦?鍒?00涓妭鐐硅鍋氬疄楠?
-		return (char*)szKey;
+	if (nodecount <= 0 || nodecount > 100) {   //閸欘亣鍏橀崷?閸?00娑擃亣濡悙纭咁潌閸嬫艾鐤勬?
+		return "5";
 	}
-	//璇诲彇缃戞涓暟
+	//鐠囪褰囩純鎴烆唽娑擃亝鏆?
 	curNode = curNode->next;
 	int segmentcount;
-	if ((!xmlStrcmp(curNode->name, (const xmlChar *) "segmentcount"))) //瀹為獙缃戞涓暟
+	if ((!xmlStrcmp(curNode->name, (const xmlChar *) "segmentcount"))) //鐎圭偤鐛欑純鎴烆唽娑擃亝鏆?
 	{
 		szKey = xmlNodeGetContent(curNode);
 		segmentcount = atoi((char*) szKey);
-		//cout << "缃戞涓暟涓猴細" << segmentcount << endl<<endl;
+		//cout << "缂冩垶顔屾稉顏呮殶娑撶?寸窗" << segmentcount << endl<<endl;
 		xmlFree(szKey);
 	} else {
 		return "6";
 	}
-	cout << "寮€濮嬪垱寤虹綉缁滆妭鐐?\n";
-	NodeContainer nodes;                            //鎵€鏈夎妭鐐瑰瓨鏀惧湪杩欎釜container鍐?
+	cout << "瀵偓婵鍨卞铏圭秹缂佹粏濡悙?\n";
+	NodeContainer nodes;                            //閹碘偓閺堝濡悙鐟扮摠閺€鎯ф躬鏉╂瑤閲渃ontainer閸?
 	nodes.Create(nodecount);
-	cout << "瀹夎缃戠粶鍗忚\n";
+	cout << "鐎瑰顥婄純鎴犵捕閸楀繗顔匼n";
 	InternetStackHelper internetv4;
 	internetv4.Install(nodes);
-	NodeContainer *nodecontainer = new NodeContainer[segmentcount];                 //涓€涓猚ontainer鏁扮粍, 澶у皬涓虹綉娈垫暟, 姣忎釜鍏冪礌鏈変袱涓妭鐐?
+	NodeContainer *nodecontainer = new NodeContainer[segmentcount];                 //娑撯偓娑撶寶ontainer閺佹壆绮? 婢堆冪毈娑撹櫣缍夊▓鍨殶, 濮ｅ繋閲滈崗鍐閺堝琚辨稉顏囧Ν閻?
 	if (nodecontainer == NULL) {
 		return "7";
 	}
 	Ipv4InterfaceContainer *ipv4interfaceiontainer =
-			new Ipv4InterfaceContainer[segmentcount];                       //璁板綍浜嗕竴鍧楃綉鍗′笂鐨処P鍦板潃闆? 杩樻槸鍗曠嫭鐨刬p鍦板潃?
+			new Ipv4InterfaceContainer[segmentcount];                       //鐠佹澘缍嶆禍鍡曠閸ф缍夐崡鈥茬瑐閻ㄥ嚘P閸︽澘娼冮梿? 鏉╂ɑ妲搁崡鏇犲閻ㄥ埇p閸︽澘娼?
 	if (ipv4interfaceiontainer == NULL) {
 		return "7";
 	}
 	NetDeviceContainer *netdevicecontainer =
-			new NetDeviceContainer[segmentcount];                           //缃戝崱闆嗗悎, 姣忎釜璁惧鍙互鏈夊鍧楃綉鍗? 骞朵笖浼氬鍑轰竴鍧椾笉鍙敤缃戝崱. 涓嬫爣涓?.
+			new NetDeviceContainer[segmentcount];                           //缂冩垵宕遍梿鍡楁値, 濮ｅ繋閲滅拋鎯ь槵閸欘垯浜掗張澶婎樋閸ф缍夐崡? 楠炴湹绗栨导姘樋閸戣桨绔撮崸妞剧瑝閸欘垳鏁ょ純鎴濆幢. 娑撳鐖ｆ稉?.
 	if (ipv4interfaceiontainer == NULL) {
 		return "7";
 	}
@@ -227,75 +227,75 @@ const char* ping(char* name) {
 	{
 		segmentid[i]= -1;
 	}
-	int *nodeid=new int[nodecount];                                                 //璁板綍浜嗗搴斾綅缃畁ode鏁扮粍鐨勮澶囩殑ID鍙? 鏈▼搴忓唴ID鍙蜂负node鏁扮粍涓嬫爣
+	int *nodeid=new int[nodecount];                                                 //鐠佹澘缍嶆禍鍡楊嚠鎼存柧缍呯純鐣乷de閺佹壆绮嶉惃鍕啎婢跺洨娈慖D閸? 閺堫剛鈻兼惔蹇撳敶ID閸欒渹璐焠ode閺佹壆绮嶆稉瀣垼
 	for(int i=0;i<nodecount;i++)
 	{
 		nodeid[i]= -1;                           
 	}
-	//cout << "寮€濮嬪垱寤轰俊閬? << endl<<endl;
-	CsmaHelper csma; //淇￠亾
+	//cout << "瀵偓婵鍨卞杞颁繆闁? << endl<<endl;
+	CsmaHelper csma; //娣囷繝浜?
 	csma.SetDeviceAttribute("Mtu", UintegerValue(1500));
 	csma.SetChannelAttribute("DataRate", DataRateValue(5000000));
 	csma.SetChannelAttribute("Delay", TimeValue(MilliSeconds(2)));
 
-	int localID;                                                            //璁板綍鏈湴璁惧淇℃伅
+	int localID;                                                            //鐠佹澘缍嶉張顒€婀寸拋鎯ь槵娣団剝浼?
 	string localipaddress = "null";
 	string localmask;
-	int remoteID;                                                           //璁板綍杩滅▼璁惧淇℃伅
+	int remoteID;                                                           //鐠佹澘缍嶆潻婊呪柤鐠佹儳顦穱鈩冧紖
 	string remoteipaddress = "null";
 	string remotemask;
 	curNode = curNode->next;
 
 
-//--------------------------鑾峰彇鏈湴涓绘満鍜岃繙绋嬩富鏈虹殑ID鍙?-------------------------------
-	if ((!xmlStrcmp(curNode->name, (const xmlChar *) "local"))) //鏈湴涓绘満
+//--------------------------閼惧嘲褰囬張顒€婀存稉缁樻簚閸滃矁绻欑粙瀣╁瘜閺堣櫣娈慖D閸?-------------------------------
+	if ((!xmlStrcmp(curNode->name, (const xmlChar *) "local"))) //閺堫剙婀存稉缁樻簚
 	{
                 //cout<< curNode->name<< endl;
 		xmlAttrPtr attrPtr = curNode->properties;
-		if (!xmlStrcmp(attrPtr->name, BAD_CAST "ID")) //鑾峰緱鑺傜偣1ID
+		if (!xmlStrcmp(attrPtr->name, BAD_CAST "ID")) //閼惧嘲绶遍懞鍌滃仯1ID
 				{
 			xmlChar* szAttr;
 			szAttr = xmlGetProp(curNode, BAD_CAST "ID");
 			localID = atoi((char*) szAttr);
-			//cout << "璇诲彇婧愯妭鐐笽D锛? << localID << endl;
+			//cout << "鐠囪褰囧┃鎰Ν閻愮D閿? << localID << endl;
 			xmlFree(szAttr);
 		}
 	}else if((!xmlStrcmp(curNode->name, (const xmlChar *) "remote"))){
                 xmlAttrPtr attrPtr = curNode->properties;
-		if (!xmlStrcmp(attrPtr->name, BAD_CAST "ID")) //鑾峰緱鑺傜偣1ID
+		if (!xmlStrcmp(attrPtr->name, BAD_CAST "ID")) //閼惧嘲绶遍懞鍌滃仯1ID
 				{
 			xmlChar* szAttr;
 			szAttr = xmlGetProp(curNode, BAD_CAST "ID");
 			remoteID = atoi((char*) szAttr);
-			//cout << "璇诲彇鐩爣鑺傜偣ID锛? << remoteID << endl<<endl;
-                        //cout << "璇诲彇鐩爣鑺傜偣ID锛? << remoteID << endl<<endl;
+			//cout << "鐠囪褰囬惄顔界垼閼哄倻鍋D閿? << remoteID << endl<<endl;
+                        //cout << "鐠囪褰囬惄顔界垼閼哄倻鍋D閿? << remoteID << endl<<endl;
 			xmlFree(szAttr);
 		}
         }
-	//鐩爣涓绘満
+	//閻╊喗鐖ｆ稉缁樻簚
 	curNode = curNode->next;
-	if ((!xmlStrcmp(curNode->name, (const xmlChar *) "remote"))) //鐩爣涓绘満
+	if ((!xmlStrcmp(curNode->name, (const xmlChar *) "remote"))) //閻╊喗鐖ｆ稉缁樻簚
 	{
 		xmlAttrPtr attrPtr = curNode->properties;
-		if (!xmlStrcmp(attrPtr->name, BAD_CAST "ID")) //鑾峰緱鑺傜偣1ID
+		if (!xmlStrcmp(attrPtr->name, BAD_CAST "ID")) //閼惧嘲绶遍懞鍌滃仯1ID
 				{
 			xmlChar* szAttr;
 			szAttr = xmlGetProp(curNode, BAD_CAST "ID");
 			remoteID = atoi((char*) szAttr);
-			//cout << "璇诲彇鐩爣鑺傜偣ID锛? << remoteID << endl<<endl;
-                      //  cout << "璇诲彇鐩爣鑺傜偣ID锛? << remoteID << endl<<endl;
+			//cout << "鐠囪褰囬惄顔界垼閼哄倻鍋D閿? << remoteID << endl<<endl;
+                      //  cout << "鐠囪褰囬惄顔界垼閼哄倻鍋D閿? << remoteID << endl<<endl;
 			xmlFree(szAttr);
 		}
 	}else if((!xmlStrcmp(curNode->name, (const xmlChar *) "local"))){
                // cout<< curNode->name<< endl;
 		xmlAttrPtr attrPtr = curNode->properties;
-		if (!xmlStrcmp(attrPtr->name, BAD_CAST "ID")) //鑾峰緱鑺傜偣1ID
+		if (!xmlStrcmp(attrPtr->name, BAD_CAST "ID")) //閼惧嘲绶遍懞鍌滃仯1ID
 				{
 			xmlChar* szAttr;
 			szAttr = xmlGetProp(curNode, BAD_CAST "ID");
 			localID = atoi((char*) szAttr);
-			//cout << "璇诲彇婧愯妭鐐笽D锛? << localID << endl;
-                       // cout << "璇诲彇婧愯妭鐐笽D锛? << localID << endl;
+			//cout << "鐠囪褰囧┃鎰Ν閻愮D閿? << localID << endl;
+                       // cout << "鐠囪褰囧┃鎰Ν閻愮D閿? << localID << endl;
 			xmlFree(szAttr);
 		}
         }
@@ -306,22 +306,24 @@ const char* ping(char* name) {
  
 
 
-//---------------------寮€濮嬭繘鍏ョ綉娈靛惊鐜? 涓虹綉娈典袱绔殑璁惧杩涜閰嶇疆-------------------------        
+//---------------------瀵偓婵绻橀崗銉х秹濞堥潧鎯婇悳? 娑撹櫣缍夊▓鍏歌⒈缁旑垳娈戠拋鎯ь槵鏉╂稖顢戦柊宥囩枂-------------------------     
+	try
+	{   
 	while (segNode != NULL
 			&& (!xmlStrcmp(segNode->name, (const xmlChar *) "segment"))) {
 		int segmentID;
 		int segmentID1;
 		curNode = segNode;
-		if ((!xmlStrcmp(curNode->name, (const xmlChar *) "segment"))) //缃戞寰幆
+		if ((!xmlStrcmp(curNode->name, (const xmlChar *) "segment"))) //缂冩垶顔屽顏嗗箚
 		{
 			xmlNodePtr propSegPtr = curNode;
 			xmlAttrPtr attrPtr = propSegPtr->properties;
-			if (!xmlStrcmp(attrPtr->name, BAD_CAST "ID")) //缃戞ID
+			if (!xmlStrcmp(attrPtr->name, BAD_CAST "ID")) //缂冩垶顔孖D
 					{
 				xmlChar* szAttr = xmlGetProp(propSegPtr, BAD_CAST "ID");
 				segmentID = atoi((char*) szAttr);
 				segmentID1=segmentID;
-				//cout << "缃戞" << segmentID<< "寮€濮嬪垱寤猴細" << endl;
+				//cout << "缂冩垶顔? << segmentID<< "瀵偓婵鍨卞鐚寸窗" << endl;
 				for(int i=0;i<segmentcount;i++)
 				{
 					if(segmentid[i]!=-1)
@@ -344,16 +346,16 @@ const char* ping(char* name) {
 			curNode = curNode->xmlChildrenNode; //node
 		}
 
-		eleNode1 = curNode; //鑺傜偣1
-		eleNode2 = curNode->next; //鑺傜偣2
+		eleNode1 = curNode; //閼哄倻鍋?
+		eleNode2 = curNode->next; //閼哄倻鍋?
 		xmlNodePtr propNodePtr1 = eleNode1;
 		xmlNodePtr propNodePtr2 = eleNode2;
-		int ID1; //鑺傜偣1缂栧彿
-		int ID2; //鑺傜偣2缂栧彿
-		int ID11; //鑺傜偣1缂栧彿
-		int ID22; //鑺傜偣2缂栧彿
+		int ID1; //閼哄倻鍋?缂傛牕褰?
+		int ID2; //閼哄倻鍋?缂傛牕褰?
+		int ID11; //閼哄倻鍋?缂傛牕褰?
+		int ID22; //閼哄倻鍋?缂傛牕褰?
 		if ((!xmlStrcmp(eleNode1->name, (const xmlChar *) "node"))
-				&& (!xmlStrcmp(eleNode2->name, (const xmlChar *) "node"))) //涓や釜鑺傜偣
+				&& (!xmlStrcmp(eleNode2->name, (const xmlChar *) "node"))) //娑撱倓閲滈懞?倻??
 				{
 			xmlAttrPtr attrPtr1 = propNodePtr1->properties;
 			xmlAttrPtr attrPtr2 = propNodePtr2->properties;
@@ -361,7 +363,7 @@ const char* ping(char* name) {
 			xmlChar* szAttr2;
 			Ptr<Node> n1;
 			Ptr<Node> n2;
-			if (!xmlStrcmp(attrPtr1->name, BAD_CAST "ID")) //鑾峰緱鑺傜偣1ID
+			if (!xmlStrcmp(attrPtr1->name, BAD_CAST "ID")) //閼惧嘲绶遍懞鍌滃仯1ID
 					{
 				szAttr1 = xmlGetProp(propNodePtr1, BAD_CAST "ID");
 				ID1 = atoi((char*) szAttr1);
@@ -383,23 +385,23 @@ const char* ping(char* name) {
 					}
 					else
 					{
-						nodeid[i]=ID1;                          //纭畾ID鍙?
+						nodeid[i]=ID1;                          //绾喖鐣綢D閸?
                                                 if(ID1== remoteID){
                                                         remoteIndex= i;
                                                 }else if(ID1== localID){
                                                         localIndex= i;
                                                 }
                                                 cout<< ID1+ " \n"; 
-						ID1=i;                                  //ID1鍙互纭畾鑺傜偣鍦╪ode鏁扮粍涓殑浣嶇疆.
+						ID1=i;                                  //ID1閸欘垯浜掔涵顔肩暰閼哄倻鍋ｉ崷鈺猳de閺佹壆绮嶆稉顓犳畱娴ｅ秶鐤?
 						break;
 					}
 				}*/
 				xmlFree(szAttr1);
-				n1 = nodes.Get(ID1);                                    //鑾峰緱鑺傜偣1
+				n1 = nodes.Get(ID1);                                    //閼惧嘲绶遍懞鍌滃仯1
 			}
 			attrPtr1 = attrPtr1->next;
 
-			if (!xmlStrcmp(attrPtr2->name, BAD_CAST "ID")) //鑾峰緱鑺傜偣2ID
+			if (!xmlStrcmp(attrPtr2->name, BAD_CAST "ID")) //閼惧嘲绶遍懞鍌滃仯2ID
 					{
 				szAttr2 = xmlGetProp(propNodePtr2, BAD_CAST "ID");
 				ID2 = atoi((char*) szAttr2);
@@ -434,17 +436,17 @@ const char* ping(char* name) {
 					}
 				}*/
 				xmlFree(szAttr2);
-				n2 = nodes.Get(ID2); //鑾峰緱鑺傜偣2
+				n2 = nodes.Get(ID2); //閼惧嘲绶遍懞鍌滃仯2
 			}
 			attrPtr2 = attrPtr2->next;
 
-			NodeContainer nc = nodecontainer[segmentID]; //鑺傜偣瀹瑰櫒
-			Ipv4InterfaceContainer iic = ipv4interfaceiontainer[segmentID];         //iic鏄繖涓綉娈典腑涓や釜绔偣璁惧鐨処P鎺ュ彛鐨勫鍣?
+			NodeContainer nc = nodecontainer[segmentID]; //閼哄倻鍋ｇ€圭懓娅?
+			Ipv4InterfaceContainer iic = ipv4interfaceiontainer[segmentID];         //iic閺勵垵绻栨稉顏嗙秹濞堝吀鑵戞稉銈勯嚋缁旑垳鍋ｇ拋鎯ь槵閻ㄥ嚘P閹恒儱褰涢惃鍕啇閸?
 			nc.Add(n1);
 			nc.Add(n2);
 
 			NetDeviceContainer nd = netdevicecontainer[segmentID];
-			nd = csma.Install(nc); //缃戠粶璁惧
+			nd = csma.Install(nc); //缂冩垹绮剁拋鎯ь槵
 
 			Ptr<NetDevice> dev1 = nd.Get(0);
 			Ptr<NetDevice> dev2 = nd.Get(1);
@@ -463,17 +465,17 @@ const char* ping(char* name) {
 			xmlNodePtr routertable2;
 			int nodetype1;
 			int nodetype2;
-			//鑺傜偣1
+			//閼哄倻鍋?
 			if (!xmlStrcmp(attrPtr1->name, BAD_CAST "type")) {
 
 				szAttr1 = xmlGetProp(propNodePtr1, BAD_CAST "type");
-				if ((!xmlStrcmp(szAttr1, (const xmlChar *) "host"))) //涓绘満
+				if ((!xmlStrcmp(szAttr1, (const xmlChar *) "host"))) //娑撶粯婧€
 				{
 					////////////////////////////////////////////////////////
-					//璁剧疆IP鍜宮ask
+					//鐠佸墽鐤咺P閸滃ask
                                         //cout<< "host node"<< nc.Get(0)->GetId()<< " register device!"<< endl;
-					//cout << "涓绘満" << ID11 << "寮€濮嬪垱寤猴細" << endl;                //鐜板湪ID11鎵嶆槸鐪熸鐨勮澶囩殑ID鍙?
-					nodetype1 = 1;                                  //noudetype涓?鏄富鏈? 涓?鏄矾鐢?
+					//cout << "娑撶粯婧€" << ID11 << "瀵偓婵鍨卞鐚寸窗" << endl;                //閻滄澘婀狪D11閹靛秵妲搁惇鐔割劀閻ㄥ嫯顔曟径鍥╂畱ID閸?
+					nodetype1 = 1;                                  //noudetype娑?閺勵垯瀵岄張? 娑?閺勵垵鐭鹃悽?
 					curNode = curNode->xmlChildrenNode;			//IP
 					if ((!xmlStrcmp(curNode->name,
 							(const xmlChar *) "ipaddress"))) {
@@ -495,22 +497,23 @@ const char* ping(char* name) {
 						unsigned long int m = inet_addr(mask1.c_str());
 						in.s_addr = ip;
 						ma.s_addr = m;
-						ipaddress1.clear();
+						ipaddress1.clear();	
 						ipaddress1.assign(inet_ntoa(in));
-						mask1.clear();
+						mask1.clear();			
 						mask1.assign(inet_ntoa(ma));
-						//cout << "涓绘満" << ID11 << "鍒嗛厤IP鍦板潃锛? << ipaddress1 << "  "
+						//cout << "娑撶粯婧€" << ID11 << "閸掑棝鍘P閸︽澘娼冮敍? << ipaddress1 << "  "
 								//<< mask1 << endl;
+		
 						assignAddr(iic, dev1, ipaddress1.c_str(),
-								mask1.c_str());			//璁剧疆
+								mask1.c_str());			//鐠佸墽鐤?
 					}
 				}
-				if ((!xmlStrcmp(szAttr1, (const xmlChar *) "router")))	//璺敱鍣?
+				if ((!xmlStrcmp(szAttr1, (const xmlChar *) "router")))	//鐠侯垳鏁遍崳?
 				{
-					//cout << "璺敱鍣? << ID11 << "寮€濮嬪垱寤猴細" << endl;
+					//cout << "鐠侯垳鏁遍崳? << ID11 << "瀵偓婵鍨卞鐚寸窗" << endl;
                                         //cout<< "route node"<< nc.Get(0)->GetId()<< " register device!"<< endl;
 					nodetype1 = 2;
-					//璁剧疆IP锛宮ask鍜岃矾鐢辫〃
+					//鐠佸墽鐤咺P閿涘ask閸滃矁鐭鹃悽杈€?
 					curNode = curNode->xmlChildrenNode;			//IP
 					if ((!xmlStrcmp(curNode->name,
 							(const xmlChar *) "ipaddress"))) {
@@ -533,13 +536,13 @@ const char* ping(char* name) {
 						in.s_addr = ip;
 						ma.s_addr = m;
 						ipaddress1.clear();
-						ipaddress1.assign(inet_ntoa(in));
 						mask1.clear();
 						mask1.assign(inet_ntoa(ma));
-						//cout << "璺敱鍣? << ID11 << "鍒嗛厤IP鍦板潃锛? << ipaddress1 << "  "
+						ipaddress1.assign(inet_ntoa(in));
+						//cout << "鐠侯垳鏁遍崳? << ID11 << "閸掑棝鍘P閸︽澘娼冮敍? << ipaddress1 << "  "
 								//<< mask1 << endl;
 						assignAddr(iic, dev1, ipaddress1.c_str(),
-								mask1.c_str());			//璁剧疆
+								mask1.c_str());			//鐠佸墽鐤?
 
 						curNode = curNode->next;
 						if ((!xmlStrcmp(curNode->name,
@@ -552,17 +555,17 @@ const char* ping(char* name) {
 				xmlFree(szAttr1);
 			}
 
-			//鑺傜偣2
+			//閼哄倻鍋?
 			curNode = eleNode2;
 			if (!xmlStrcmp(attrPtr2->name, BAD_CAST "type")) {
 				szAttr2 = xmlGetProp(propNodePtr2, BAD_CAST "type");
-				if ((!xmlStrcmp(szAttr2, (const xmlChar *) "host")))	//涓绘満
+				if ((!xmlStrcmp(szAttr2, (const xmlChar *) "host")))	//娑撶粯婧€
 				{
-					//cout << "涓绘満" << ID22 << "寮€濮嬪垱寤猴細" << endl;
+					//cout << "娑撶粯婧€" << ID22 << "瀵偓婵鍨卞鐚寸窗" << endl;
                                         //cout<< "host node"<< nc.Get(1)->GetId()<< " register device!"<< endl;
 					nodetype2 = 1;
 					////////////////////////////////////////////////////////
-					//璁剧疆IP鍜宮ask
+					//鐠佸墽鐤咺P閸滃ask
 					curNode = curNode->xmlChildrenNode;			//IP
 					if ((!xmlStrcmp(curNode->name,
 							(const xmlChar *) "ipaddress"))) {
@@ -588,18 +591,18 @@ const char* ping(char* name) {
 						ipaddress2.assign(inet_ntoa(in));
 						mask2.clear();
 						mask2.assign(inet_ntoa(ma));
-						//cout << "涓绘満" << ID22 << "鍒嗛厤IP鍦板潃锛? << ipaddress2 << "  "
+						//cout << "娑撶粯婧€" << ID22 << "閸掑棝鍘P閸︽澘娼冮敍? << ipaddress2 << "  "
 								//<< mask2 << endl;
 						assignAddr(iic, dev2, ipaddress2.c_str(),
-								mask2.c_str());			//璁剧疆
+								mask2.c_str());			//鐠佸墽鐤?
 					}
 				}
-				if ((!xmlStrcmp(szAttr2, (const xmlChar *) "router")))	//璺敱鍣?
+				if ((!xmlStrcmp(szAttr2, (const xmlChar *) "router")))	//鐠侯垳鏁遍崳?
 				{
-					//cout << "璺敱鍣? << ID22 << "寮€濮嬪垱寤猴細" << endl;
+					//cout << "鐠侯垳鏁遍崳? << ID22 << "瀵偓婵鍨卞鐚寸窗" << endl;
                                         //cout<< "route node"<< nc.Get(1)->GetId()<< " register device!"<< endl;
 					nodetype2 = 2;
-					//璁剧疆IP锛宮ask鍜岃矾鐢辫〃
+					//鐠佸墽鐤咺P閿涘ask閸滃矁鐭鹃悽杈€?
 					curNode = curNode->xmlChildrenNode;			//IP
 					if ((!xmlStrcmp(curNode->name,
 							(const xmlChar *) "ipaddress"))) {
@@ -625,10 +628,11 @@ const char* ping(char* name) {
 						ipaddress2.assign(inet_ntoa(in));
 						mask2.clear();
 						mask2.assign(inet_ntoa(ma));
-						//cout << "璺敱鍣? << ID22 << "鍒嗛厤IP鍦板潃锛? << ipaddress2 << "  "
+						//cout << "鐠侯垳鏁遍崳? << ID22 << "閸掑棝鍘P閸︽澘娼冮敍? << ipaddress2 << "  "
 								//<< mask2 << endl;
+							cout<< "arrive"<<endl;
 						assignAddr(iic, dev2, ipaddress2.c_str(),
-								mask2.c_str());			//璁剧疆
+								mask2.c_str());			//鐠佸墽鐤?
 						curNode = curNode->next;
 						if ((!xmlStrcmp(curNode->name,
 								(const xmlChar *) "routertable"))) {
@@ -639,20 +643,19 @@ const char* ping(char* name) {
 				}
 				xmlFree(szAttr2);
 			}
-
 			///
 			int setnumber1 = 0;
 			int setnumber2 = 0;
 			string temp1 = ipaddress1.substr(0, 4);
 			string temp2 = ipaddress2.substr(0, 4);
 			if (temp1 != "null" && temp2 != "null") {
-				if (nodetype1 == 2) {                                   //濡傛灉璁惧1鏄矾鐢卞櫒, 杩涘叆IF
+				if (nodetype1 == 2) {                                   //婵″倹鐏夌拋鎯ь槵1閺勵垵鐭鹃悽鍗炴珤, 鏉╂稑鍙咺F
 					curNode = routertable1->xmlChildrenNode;
 					if((curNode!= NULL)&&(!xmlStrcmp(curNode->name, (const xmlChar *) "item"))) {
-						//cout << "璺敱鍣? << ID11 << "閰嶇疆璺敱琛細" << endl;
+						//cout << "鐠侯垳鏁遍崳? << ID11 << "闁板秶鐤嗙捄顖滄暠鐞涱煉绱? << endl;
 						xmlNodePtr itemnode = curNode;
 						while (itemnode != NULL) {
-							dest1.clear();                          //璇诲彇璺敱琛ㄩ」涓殑IP鍦板潃
+							dest1.clear();                          //鐠囪褰囩捄顖滄暠鐞涖劑銆嶆稉顓犳畱IP閸︽澘娼?
 							curNode = itemnode->xmlChildrenNode;
 							szKey = xmlNodeGetContent(curNode);
 							dest1.append((char*) szKey);
@@ -662,13 +665,13 @@ const char* ping(char* name) {
 							temp = dest1.substr(0, 4);
 							if (temp != "null") {
 								ma1.clear();
-								curNode = curNode->next;                       //璇诲彇璺敱琛ㄩ」涓殑瀛愮綉鎺╃爜
+								curNode = curNode->next;                       //鐠囪褰囩捄顖滄暠鐞涖劑銆嶆稉顓犳畱鐎涙劗缍夐幒鈺冪垳
 								szKey = xmlNodeGetContent(curNode);
 								ma1.append((char*) szKey);
 								xmlFree(szKey);
 
 								nexthop1.clear();
-								curNode = curNode->next;		//璇诲彇璺敱琛ㄩ」涓殑涓嬩竴璺?
+								curNode = curNode->next;		//鐠囪褰囩捄顖滄暠鐞涖劑銆嶆稉顓犳畱娑撳绔寸捄?
 								szKey = xmlNodeGetContent(curNode);
 								nexthop1.append((char*) szKey);
 								xmlFree(szKey);
@@ -697,7 +700,7 @@ const char* ping(char* name) {
 										ma1.assign(inet_ntoa(m1));
 										nexthop1.clear();
 										nexthop1.assign(inet_ntoa(d2));
-										setnumber1 = 1;		//璺敱鍣?宸茶缃潤鎬佽矾鐢辫〃
+										setnumber1 = 1;		//鐠侯垳鏁遍崳?瀹歌尪顔曠純顕€娼ら幀浣界熅閻㈣精銆?
 										SetRouter(iic, setnumber1, true,
 												dest1.c_str(), ma1.c_str(),
 												nexthop1.c_str());
@@ -711,10 +714,10 @@ const char* ping(char* name) {
 					}
 				}
 				if (nodetype2 == 2) {
-					int tag = -1;			//璁板綍绗簩涓矾鐢卞櫒鏄惁璁剧疆闈欐€佽矾鐢?
+					int tag = -1;			//鐠佹澘缍嶇粭顑跨癌娑擃亣鐭鹃悽鍗炴珤閺勵垰鎯佺拋鍓х枂闂堟瑦鈧浇鐭鹃悽?
 					curNode = routertable2->xmlChildrenNode;		//item
 					if ((curNode!= NULL)&& (!xmlStrcmp(curNode->name, (const xmlChar *) "item"))) {
-						//cout << "璺敱鍣? << ID22 << "閰嶇疆璺敱琛細" << endl;
+						//cout << "鐠侯垳鏁遍崳? << ID22 << "闁板秶鐤嗙捄顖滄暠鐞涱煉绱? << endl;
 						xmlNodePtr itemnode = curNode;
 						while (itemnode != NULL) {
 							dest2.clear();
@@ -831,7 +834,7 @@ const char* ping(char* name) {
 				if (temp != "null") {
 					localipaddress = ipaddress1;
 					localmask = mask1;
-					//cout<<"璇诲彇婧愯妭鐐?<<localID<<"IP鍦板潃锛?<<localipaddress<<"  "<<localmask<<endl;
+					//cout<<"鐠囪褰囧┃鎰Ν閻?<<localID<<"IP閸︽澘娼冮敍?<<localipaddress<<"  "<<localmask<<endl;
 				}
 			}
 			if (ID22 == localID) {
@@ -839,7 +842,7 @@ const char* ping(char* name) {
 				if (temp != "null") {
 					localipaddress = ipaddress2;
 					localmask = mask2;
-					//cout<<"璇诲彇婧愯妭鐐?<<localID<<"IP鍦板潃锛?<<localipaddress<<"  "<<localmask<<endl;
+					//cout<<"鐠囪褰囧┃鎰Ν閻?<<localID<<"IP閸︽澘娼冮敍?<<localipaddress<<"  "<<localmask<<endl;
 				}
 			}
 			if (ID11 == remoteID) {
@@ -847,7 +850,7 @@ const char* ping(char* name) {
 				if (temp != "null") {
 					remoteipaddress = ipaddress1;
 					remotemask = mask1;
-					//cout<<"璇诲彇鐩爣鑺傜偣"<<remoteID<<"IP鍦板潃锛?<<remoteipaddress<<"  "<<remotemask<<endl;
+					//cout<<"鐠囪褰囬惄顔界垼閼哄倻鍋?<<remoteID<<"IP閸︽澘娼冮敍?<<remoteipaddress<<"  "<<remotemask<<endl;
 				}
 			}
 			if (ID22 == remoteID) {
@@ -855,23 +858,33 @@ const char* ping(char* name) {
 				if (temp != "null") {
 					remoteipaddress = ipaddress2;
 					remotemask = mask2;
-					//cout<<"璇诲彇鐩爣鑺???<<remoteID<<"IP鍦板潃锛?<<remoteipaddress<<"  "<<remotemask<<endl;
+					//cout<<"鐠囪褰囬惄顔界垼閼???<<remoteID<<"IP閸︽澘娼冮敍?<<remoteipaddress<<"  "<<remotemask<<endl;
 				}
 			}
 		} else {
 			//return "-4";
 		}
-		//cout << "缃戞" << segmentID1 << "鍒涘缓缁撴潫銆? << endl << endl;
-		segNode = segNode->next;			//涓嬩竴涓綉娈?
+		//cout << "缂冩垶顔? << segmentID1 << "閸掓稑缂撶紒鎾存将閵? << endl << endl;
+		segNode = segNode->next;			//娑撳绔存稉顏嗙秹濞?
+					cout<< "seg end"<< endl;
+	}
+	}catch(exception& e)
+	{
+		return "1";
+	}catch(int i)
+	{
+		return "1";
+	}catch(char* c)
+	{
+		return "1";
 	}
 
 	xmlFreeDoc(doc);
-
-//鎸夌収瀹為獙绫诲瀷鍒涘缓搴旂敤
+//閹稿鍙庣€圭偤鐛欑猾璇茬€烽崚娑樼紦鎼存梻鏁?
 	if (localipaddress != "null" && remoteipaddress != "null") {
 		uint32_t packetSize = 1024;
 		Time interPacketInterval = Seconds(1.0);
-		//cout << "寮€濮嬪湪鑺傜偣涓婂垱寤哄簲鐢細" << endl;
+		//cout << "瀵偓婵婀懞鍌滃仯娑撳﹤鍨卞鍝勭安閻㈩煉绱? << endl;
 		unsigned long int ip = inet_addr(remoteipaddress.c_str());
 		in_addr in;
 		in.s_addr = ip;
@@ -884,7 +897,7 @@ const char* ping(char* name) {
 		apps.Start(Seconds(1.0));
 		apps.Stop(Seconds(3.0));
 	}
-	//cout << "瀹氫箟鍖呬俊鎭? << endl;
+	//cout << "鐎规矮绠熼崠鍛繆閹? << endl;
 	AsciiTraceHelper ascii;
        // cout << "A" << endl;
  	csma.EnableAsciiAll(ascii.CreateFileStream(trname));
@@ -929,14 +942,13 @@ const char* ping(char* name) {
                 randStr= randStr+ '|'+ count;
         }
         randStr= randStr+ '|';
-    return "1";
 
 //NS_LOG_INFO ("Run Simulation.");
-	//cout << "妯℃嫙瀹為獙寮€濮嬭繍琛岋細" << endl;
+	//cout << "濡剝瀚欑€圭偤鐛欏鈧慨瀣箥鐞涘矉绱? << endl;
 	Simulator::Run();
-	//cout << "妯℃嫙瀹為獙杩愯缁撴潫锛? << endl;
+	//cout << "濡剝瀚欑€圭偤鐛欐潻鎰攽缂佹挻娼敍? << endl;
 	Simulator::Destroy();
-	//cout << "閲婃斁璧勬簮" << endl;
+	//cout << "闁插﹥鏂佺挧鍕爱" << endl;
 
 
 
