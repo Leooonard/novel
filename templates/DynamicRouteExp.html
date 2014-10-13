@@ -49,11 +49,13 @@
        }
        .labdevicetitle{
        		position: absolute;
+       		width: 100%;
        		top: 0px;
        		left: 0px;
+       		padding: 5px;
        		text-align: center;
        		font-family: Microsoft Yahei;
-       		font-size: 1.3em;
+       		font-size: 1.2em;
        		background-color: #1A5091;
        		color: #FFEDA2;
        }
@@ -1193,8 +1195,9 @@
 					mainCt.fillStyle= "#1A5091";
 					mainCt.fillRect(0, 0, MAIN_CANVAS_WIDTH, MAIN_CANVAS_HEIGHT);
 				}
+				context.font = "20px Helvetica";
 				mainCt.fillStyle = '#1A5091';
-				mainCt.fillText('实验平台', 490, 60);
+				mainCt.fillText('实验平台', 470, 60);
 				for(var i= 0; i< routeArray.length; i++){
 					routeArray[i].draw(mainCt);
 				}
