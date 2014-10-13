@@ -957,7 +957,7 @@ const char* ping(char* name) {
 	delete[] netdevicecontainer;
 	delete[] nodeid;
 	delete[] segmentid;
-    cout<< randStr;
+    cout<< randStr.c_str()<<endl;
     return randStr.c_str();
 
 }

@@ -40,7 +40,7 @@ def DynamicRouteExp(data, path):
 		return 'failed, '+ ERROR_ARRAY[rtVal]
 	libPath= utils.GetFileRealPath(__file__, '../read.so')
 	libping= cdll.LoadLibrary(libPath)
-	Log.Log("DynamicRouteExp", "ping return value is "+ string_at(rtVal))
+	Log.Log("DynamicRouteExp", "ping return value is "+ str(string_at(rtVal)))
 	rtVal= libping.checkPCAP(ctypes.string_at(rtVal))
 	Log.Log("DynamicRouteExp", "checkPCAP return value is "+ string_at(rtVal))
 	JSONStr= ctypes.string_at(rtVal)
