@@ -115,7 +115,8 @@ def CreatePCAPZip(path):
 	prefix= prefix.group()[0: -1]
 
 	#获取前缀后开始创建压缩文件
-	zipTool= zipfile.ZipFile(prefix+ '.zip', 'w', zipfile.ZIP_STORED)
+	zipPath= os.path.join(path, prefix+ '.zip')
+	zipTool= zipfile.ZipFile(zipPath, 'w', zipfile.ZIP_STORED)
 	for filename in filelist:
 		zipTool.write(os.path.join(path, filename))
 	zipTool.close()
