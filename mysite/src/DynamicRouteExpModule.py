@@ -52,8 +52,9 @@ def DynamicRouteExp(data, path):
 			seg["NODE"]= 'r'+ str(string.atoi(seg["NODE"]))	
 		else:
 			seg["NODE"]= 'h'+ seg["NODE"]
-
-	JSONObj['DOWNLOADPATH']= CreatePCAPZip(path) or '#' #如果返回false， 则赋值#.
+			
+	zipPath= CreatePCAPZip(path)
+	JSONObj['DOWNLOADPATH']= '/download/'+ zipPath if zipPath else '#' #如果返回false， 则赋值#.
 
 	JSONStr= simplejson.dumps(JSONObj)	
 	return JSONStr
@@ -88,7 +89,7 @@ def CreatePCAPZip(path):
 		该函数用于将实验生成的所有PCAP数据包打包成ZIP文件(不压缩). 
 		ZIP文件将放置于PCAP数据包同目录下. ZIP文件名将使用PCAP包的前缀名.
 		输入为PCAP所在文件夹路径. 
-		输出为生成的ZIP文件路径.
+		输出为生成的ZIP文件名.
 	"""
 	regx= re.compile("\w+\.pcap$")
 	filelist= []
@@ -120,7 +121,7 @@ def CreatePCAPZip(path):
 	for filename in filelist:
 		zipTool.write(os.path.join(path, filename))
 	zipTool.close()
-	return os.path.join(path, prefix+ '.zip')
+	return prefix+ '.zip'
 
 
 def ConvertJSONtoXML(JSONObj, path):
