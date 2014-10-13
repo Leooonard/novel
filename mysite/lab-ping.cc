@@ -942,6 +942,7 @@ const char* ping(char* name) {
                 randStr= randStr+ '|'+ count;
         }
         randStr= randStr+ '|';
+        randStr= randStr+ '\o';
 
 //NS_LOG_INFO ("Run Simulation.");
 	//cout << "濡剝瀚欑€圭偤鐛欏鈧慨瀣箥鐞涘矉绱? << endl;

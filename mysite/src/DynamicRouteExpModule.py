@@ -34,7 +34,7 @@ def DynamicRouteExp(data, path):
 		Log.Log("DynamicRouteExp", "rtVal is "+ str(rtVal))
 	except:
 		#转型失败说明实验产生结果. 可以进行数据包分析.
-		pass
+		rtVal= str(string_at(rtVal))[0: -1] #去除最后那个0
 	else:
 		#转型成功, 说明实验并未产生结果, 异常退出, 需要返回错误.
 		return 'failed, '+ ERROR_ARRAY[rtVal]
