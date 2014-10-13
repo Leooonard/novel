@@ -1433,7 +1433,7 @@
 						}else{
 							var $resultpaper= $(".resultpaper");
 							$resultpaper.css("display", "block");
-							var $canvas= $resultpaper.children("canvas");
+							var $canvas= $resultpaper.find("canvas");
 							var ct= $canvas.get(0).getContext("2d");
 
 							//初始化, 把设备画上去.
