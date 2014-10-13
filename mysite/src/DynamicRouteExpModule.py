@@ -13,7 +13,7 @@ import os, ctypes, MySQLdb
 import string
 from .. import utils
 import Log
-import time, os, re, random, shutil, stat
+import time, os, re, random, shutil, stat, zipfile
 
 ERROR_ARRAY= ['XML文件读取错误.', 'XML文件错误, 缺少root元素.', 'XML文件错误, 缺少root元素.', 
 				'XML文件错误, 缺少实验类型.', 'XML文件错误, 缺少节点数量.', 
@@ -21,6 +21,10 @@ ERROR_ARRAY= ['XML文件读取错误.', 'XML文件错误, 缺少root元素.', 'X
 				'XML文件错误, 网段数量错误.']
 
 def DynamicRouteExp(data, path):
+	"""
+		进行实验.
+		data为具体配置数据. path为生成文件要写入的目录路径.
+	"""
 	Log.Log('DynamicRouteExp', 'data is '+ data)
 	JSONObj= simplejson.loads(data)
 	xmlPath= ConvertJSONtoXML(JSONObj, path)
@@ -40,9 +44,7 @@ def DynamicRouteExp(data, path):
 		return 'failed, '+ ERROR_ARRAY[rtVal]
 	libPath= utils.GetFileRealPath(__file__, '../read.so')
 	libping= cdll.LoadLibrary(libPath)
-	Log.Log("DynamicRouteExp", "ping return value is "+ str(string_at(rtVal)))
 	rtVal= libping.checkPCAP(ctypes.string_at(rtVal))
-	Log.Log("DynamicRouteExp", "checkPCAP return value is "+ string_at(rtVal))
 	JSONStr= ctypes.string_at(rtVal)
 	JSONObj= simplejson.loads(JSONStr)
 	for seg in JSONObj['ARRAY']:
@@ -50,6 +52,9 @@ def DynamicRouteExp(data, path):
 			seg["NODE"]= 'r'+ str(string.atoi(seg["NODE"]))	
 		else:
 			seg["NODE"]= 'h'+ seg["NODE"]
+
+	JSONObj['DOWNLOADPATH']= CreatePCAPZip(path) or '#' #如果返回false， 则赋值#.
+	
 	JSONStr= simplejson.dumps(JSONObj)	
 	return JSONStr
 
@@ -76,6 +81,46 @@ def CreateUserFolder(acc, everytime= False):
 		os.mkdir(folderPath)
 		os.chmod(folderPath, stat.S_IRWXU+ stat.S_IRWXG+ stat.S_IRWXO) #修改权限
 		return folderPath
+
+
+def CreatePCAPZip(path):
+	"""
+		该函数用于将实验生成的所有PCAP数据包打包成ZIP文件(不压缩). 
+		ZIP文件将放置于PCAP数据包同目录下. ZIP文件名将使用PCAP包的前缀名.
+		输入为PCAP所在文件夹路径. 
+		输出为生成的ZIP文件路径.
+	"""
+	regx= re.compile("\w+\.pcap$")
+	filelist= []
+
+	if not os.path.isdir(path):
+		#传入的路径错误.
+		return False
+
+	for filename in os.listdir(path): #获取文件夹下所有文件的文件名.
+		if re.search(regx, filename)!= None:
+			#如果是pcap包则把名字加入数组.
+			filelist.append(filename)
+
+	if len(filelist)== 0:
+		return False #文件夹下不存在pcap包.
+
+	#首先获取前缀
+	regx= re.compile("^\w+-")
+	filename= filelist[0]
+	prefix= re.search(regx, filename)
+	if prefix== None:
+		#pcap包文件名错误.
+		return False
+	prefix= prefix.group()[0: -1]
+
+	#获取前缀后开始创建压缩文件
+	zipTool= zipfile.ZipFile(prefix+ '.zip', 'w', zipfile.ZIP_STORE)
+	for filename in filelist:
+		zipTool.write(os.path.join(path, filename))
+	zipTool.close()
+	return os.path.join(path, prefix+ '.zip')
+
 
 def ConvertJSONtoXML(JSONObj, path):
 		xmlTree= ElementTree()
