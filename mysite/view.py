@@ -63,6 +63,7 @@ def TestBrowserType(request):
 		return False
 
 	userBrowser= userBrowser.lower() #非空才可小写
+	Log.Log('Login', userBrowser)
 	for item in supportedBrowsers:
 		if re.search(item, userBrowser)!= None:
 			return True
@@ -99,7 +100,6 @@ def admin(request):
 	return RenderResponse('admin.html', c)
 
 def Login(request):
-	Log.Log('Login', request.META.get('HTTP_USER_AGENT', None))
 	return RenderResponse('Login.html')
 
 def DoLogin(request):
