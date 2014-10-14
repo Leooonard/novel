@@ -58,12 +58,12 @@ def TestBrowserType(request):
 
 	supportedBrowsers= [re.compile('chrome'), re.compile('firefox')]
 	userBrowser= request.META.get('HTTP_USER_AGENT', None)
+	Log.Log('Login', userBrowser)
 	if userBrowser:
 		#是空则返回错误.
 		return False
 
 	userBrowser= userBrowser.lower() #非空才可小写
-	Log.Log('Login', userBrowser)
 	for item in supportedBrowsers:
 		if re.search(item, userBrowser)!= None:
 			return True

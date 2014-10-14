@@ -41,7 +41,7 @@ def Log(funcName, message):
 	fcntl.flock(file.fileno(), fcntl.LOCK_EX)  #获取文件锁
 	messageTime= time.strftime("%Y-%m-%d %H:%M:%S. ", time.localtime(time.time())) #发生错误的时间. 时间格式为2014-10-7 22:02:00.
 	funcName= funcName+ '. ' #发生错误的函数名.
-	message= message+ '\n' #具体的错误信息
+	message= str(message)+ '\n' #具体的错误信息
 	file.write(messageTime+ funcName+ message)
 	file.close() #关闭文件. 同时失去文件锁.
 
