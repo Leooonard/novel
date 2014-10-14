@@ -29,6 +29,7 @@ def admin(request):
 	return RenderResponse('admin.html', c)
 
 def Login(request):
+	Log.Log('Login', request.META.get('HTTP_USER_AGENT', None))
 	return RenderResponse('Login.html')
 
 def DoLogin(request):
