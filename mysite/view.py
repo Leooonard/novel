@@ -8,7 +8,7 @@ from xml.etree.ElementTree import SubElement
 from xml.etree.ElementTree import dump
 from xml.etree.ElementTree import Comment
 from xml.etree.ElementTree import tostring
-import os, ctypes, MySQLdb
+import os, ctypes, MySQLdb, re
 from mysite.form import testForm
 from novel.models import *
 from src import LoginModule, AdminModule, DynamicRouteExpModule, Log, RegisterModule, PersonalSettingModule
@@ -22,6 +22,76 @@ class pingpac:
 	srcIP= 'null'
 	dstIP= 'null'
 	info= 'null'
+
+def PreProcess(request, func, *args, **kwargs):
+	"""
+		该函数对发来的请求进行预处理.
+		可执行多种需要的功能. 暂时执行两个功能.
+		1. 判断请求是否对该函数有访问权限. (未登陆无法访问实验的内容)
+		2. 判断浏览器类型. 除chrome, firefox外. 返回错误页面.
+	"""
+
+	if not TestBrowserType(request):
+		#未通过浏览器类型测试
+		context= {
+			'content': '请使用谷歌Chrome浏览器, 或Moliza Firefox浏览器进行访问.'
+		}
+		return RenderResponse('500.html', context)
+
+	if not RequestAuthority(request, func):
+		#未通过可访问性测试
+		context= {
+			'content': '请先登录, 登录后才可使用该功能.'
+		}
+		return RenderResponse('500.html', context)
+
+	#通过测试, 正常调用.
+	return func(request, *args, **kwargs)
+
+def TestBrowserType(request):
+	"""
+		该函数判断当前用户使用的浏览器类型.
+		目前只支持chrome和firefox类型浏览器.
+		传入request使函数可以访问META.HTTP_USER_AGENT.
+		返回True(是chrome或firefox), 返回False(其他不兼容类型浏览器)
+	"""
+
+	supportedBrowsers= [re.compile('chrome'), re.compile('firefox')]
+	userBrowser= request.META.get('HTTP_USER_AGENT', None)
+	if userBrowser:
+		#是空则返回错误.
+		return False
+
+	userBrowser= userBrowser.lower() #非空才可小写
+	for item in supportedBrowsers:
+		if re.search(item, userBrowser)!= None:
+			return True
+	else:
+		#列表循环完毕, 没有匹配成功, 返回错误.
+		return False
+
+def RequestAuthority(request, func):
+	"""
+		该函数判断当前用户是否有权限使用该函数.
+		目前主要针对用户是否登陆进行判断. 即session中是否包含用户信息.
+		若包含则可访问全部内容. 否则只可访问lowAuthority数组中的函数.
+		传入request使函数可以访问session， func为将要访问的具体函数.
+		返回True(有权限), False(无权限)
+	"""
+
+	lowAuthority= ['Login', 'DoLogin', 'changePassword', 'Register', 'DoRegister']
+	if func.__name__ in lowAuthority:
+		#在这个列表中， 一定可以访问.
+		return True
+
+	try:
+		request.session['stuinfo']
+	except:
+		#session中不存在用户信息.
+		return False
+	else:
+		#session中存在用户信息.
+		return True
 
 
 def admin(request):
