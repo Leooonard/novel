@@ -755,14 +755,35 @@
 				showHost.currentRectY= 150;
 				showHost.initialRectX= 10;
 				showHost.initialRectY= 150;
-				if(confirm("要加载之前的记录吗？")){
-					//加载之前的结果和读取的行为是一样的.
-					Load(false);
-				}else{
-					redrawRect();
-					devRedrawRect();
-					return false;
-				}
+
+
+
+				var preloadDiannao= $("#preloadDiannao").get(0);
+				var preloadChosenRoute= $("#preloadChosenDianno").get(0);
+				var preloadRoute= $("#preloadRoute").get(0);
+				var preloadChosenRoute= $("#preloadChosenRoute").get(0);
+				var $loading= $(".loading");
+				var $loadingword= $('.loadingword');
+				$loading.css('display', 'block');
+				$loadingword.css('display', 'block');
+				$loadingword.text('读取资源中...');
+				setTimeout(function(){
+					if(preloadDiannao.complete&& preloadChosenDianno.complete&&
+						preloadRoute.complete&& preloadChosenRoute.complete){	
+						$loading.css('display', 'none');
+						$loadingword.css('display', 'none');	
+						if(confirm("要加载之前的记录吗？")){
+							//加载之前的结果和读取的行为是一样的.
+							Load(false);
+						}else{
+							redrawRect();
+							devRedrawRect();
+							return false;
+						}
+					}else{
+						setTimeout(arguments.callee, 1500);
+					}
+				}, 1500);
             });                         
 			 
 			function addRoute(){		
@@ -1744,9 +1765,9 @@
 		</section>
 
 		<!-- 用来预读图片 -->
-		<img class= 'hide' src="/static_media/picture/diannao.jpg">
-		<img class= 'hide' src="/static_media/picture/route.jpg">
-		<img class= 'hide' src="/static_media/picture/chosen_route.jpg">
-		<img class= 'hide' src="/static_media/picture/chosen_diannao.jpg">
+		<img id= 'preloadDiannao' class= 'hide' src="/static_media/picture/diannao.jpg">
+		<img id= 'preloadRoute' class= 'hide' src="/static_media/picture/route.jpg">
+		<img id= 'preloadChosenRoute' class= 'hide' src="/static_media/picture/chosen_route.jpg">
+		<img id= 'preloadChosenDianno' class= 'hide' src="/static_media/picture/chosen_diannao.jpg">
     </body>
 </html>
